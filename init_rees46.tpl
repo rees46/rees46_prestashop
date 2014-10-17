@@ -42,7 +42,6 @@
         if (recommenderLimit == null || recommenderLimit == undefined)
           recommenderLimit = 4;
 
-        console.log(recommenderLimit);
         var recomend_products_tpl = ''
         if (recommenderType) {
           REES46.recommend({
