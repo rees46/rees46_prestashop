@@ -40,7 +40,7 @@
         var recommenderTitle = recommenderBlock.data('title');
         var recommenderLimit = recommenderBlock.data('limit');
         if (recommenderLimit == null || recommenderLimit == undefined)
-          recommenderLimit = 4;
+          recommenderLimit = 5;
 
         var recomend_products_tpl = ''
         if (recommenderType) {

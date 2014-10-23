@@ -4,7 +4,7 @@ if (!defined('_PS_VERSION_'))
 
 class rees46 extends Module
 {
-  private $hooks = array('displayHeader', 'displayProductButtons', 'actionValidateOrder');
+  private $hooks = array('displayHeader', 'displayProductButtons', 'actionValidateOrder', 'displayHome', 'displayTop', 'displayFooterProduct', 'displayShoppingCartFooter', 'displayAfterProductList');
 
   function __construct() {
     $this->name = 'rees46';
@@ -43,13 +43,27 @@ class rees46 extends Module
   public function install() {
     return (parent::install()
       && $this->registerHooks()
+      && Configuration::updateValue('home_page_popular', 1)
+      && Configuration::updateValue('category_page_popular', 1)
+      && Configuration::updateValue('category_page_recently_viewed', 1)
+      && Configuration::updateValue('category_page_interesting', 1)
+      && Configuration::updateValue('product_page_also_bought', 1)
+      && Configuration::updateValue('product_page_similar', 1)
+      && Configuration::updateValue('product_page_ineresting', 1)
+      && Configuration::updateValue('cart_page_see_also', 1)
     );
   }
 
   public function uninstall() {
+    Db::getInstance(_PS_USE_SQL_SLAVE_)->query("DELETE FROM `"._DB_PREFIX_."hook` WHERE `name`='displayAfterProductList' AND `title`='displayAfterProductList'");
     return (parent::uninstall()
       && $this->unregisterHooks()
     );
+  }
+
+  public function hookDisplayHome() {
+    if (Configuration::get('home_page_popular') == 1)
+      return $this->display(__FILE__, 'home_popular_recommender.tpl');
   }
 
   public function hookDisplayHeader() {
@@ -115,6 +129,24 @@ class rees46 extends Module
     return $this->display(__FILE__, 'product_page.tpl');
   }
 
+  public function hookDisplayFooterProduct() {
+    return $this->display(__FILE__, 'product_page_recommender.tpl');
+  }
+
+  public function hookDisplayAfterProductList() {
+    return $this->display(__FILE__, 'category_page_footer.tpl');
+  }
+
+  public function hookDisplayTop() {
+    if (Configuration::get('category_page_popular') == 1)
+      return $this->display(__FILE__, 'category_page_popular.tpl');
+  }
+
+  public function hookDisplayShoppingCartFooter() {
+    if (Configuration::get('cart_page_see_also') == 1)
+      return $this->display(__FILE__, 'cart_page_recommender.tpl');
+  }
+
   public function hookActionValidateOrder($params) {
     $order_id = $params['order']->id;
     $product_info = array();
@@ -146,8 +178,115 @@ class rees46 extends Module
 
     if (Tools::isSubmit('submit_'.$this->name))
       $message = $this->_saveContent();
+    // Выгрузка истории заказов
+    if (Tools::isSubmit('submit_unloading_orders')) {
+      $shop_id = Configuration::get('MOD_REES46_SHOP_ID');
+      $shop_secret = Configuration::get('MOD_REES46_SECRET_KEY');
+      if (($shop_id == '') || ($shop_secret == '')) {
+        $message = $this->displayError($this->l('Для выгрузки заказов введите код и секретный ключ вашего магазина в настройках модуля.'));
+      } else {
+        $sql = '
+          SELECT o.`id_order`, o.`id_customer`, o.`date_add`
+          FROM `'._DB_PREFIX_.'orders` o
+          WHERE date_add >= \''.date('Y-m-d H:i:s', strtotime('-6 month')).'\'
+          LIMIT 1000
+        ';
+        $res_orders = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
+        if (!$res_orders)
+          $message = $this->displayError($this->l('В магазине не нашлось ни одного заказа за последние 6 месяцев.'));
+        else {
+          $processed_orders = array();
 
+          foreach ($res_orders as $o) {
+            $order = new Order((int)$o['id_order']);
+            $order_products = $order->getProducts();
+            $items_formatted_info = array();
+            foreach ($order_products as $p) {
+              $product = new Product((int)$p['product_id']);
+              $product_formatted = array(
+                'id' =>  $p['product_id'],
+                'price' => $product->getPrice(!Tax::excludeTaxeOption()),
+                'categories' => $product->getCategories(),
+                'amount' => $p['product_quantity']
+              );
+
+              array_push($items_formatted_info, $product_formatted);
+            }
+
+            $customer = new Customer((int)$o['id_customer']);
+            $order_formatted_info = array(
+              'id' => $o['id_order'],
+              'user_id' => $o['id_customer'],
+              'user_email' => $customer->email,
+              'date' => strtotime($o['date_add']),
+              'items' => $items_formatted_info
+            );
+
+            array_push($processed_orders, $order_formatted_info);
+          }
+
+          $result = array(
+            'shop_id' => $shop_id,
+            'shop_secret' => $shop_secret,
+            'orders' => $processed_orders
+          );
+
+          $context = stream_context_create(array(
+            'http' => array(
+              'method' => 'POST',
+              'header' => "Content-Type: application/json\r\n",
+              'content' => json_encode($result)
+            )
+          ));
+          $curl_handle=curl_init();
+
+          // Send the request
+          $response = file_get_contents('http://api.rees46.com/import/orders.json', FALSE, $context);
+
+          // Check for errors
+          if($response === FALSE) {
+            $message = $this->displayError($this->l('Данные не отправлены'));
+          } else {
+            $responseData = json_decode($response, TRUE);
+          }
+
+          $message = $this->displayConfirmation($this->l('Выгрузка заказов в REES46 успешно инициирована.'));
+        }
+      }
+    }
+    if (Tools::isSubmit('submit_settings')) {
+      Configuration::updateValue('home_page_popular',             (Tools::getValue('home_page_popular') == 'on' ? 1 : 0));
+      Configuration::updateValue('category_page_popular',         (Tools::getValue('category_page_popular') == 'on' ? 1 : 0));
+      Configuration::updateValue('category_page_recently_viewed', (Tools::getValue('category_page_recently_viewed') == 'on' ? 1 : 0));
+      Configuration::updateValue('category_page_interesting',     (Tools::getValue('category_page_interesting') == 'on' ? 1 : 0));
+      Configuration::updateValue('product_page_also_bought',      (Tools::getValue('product_page_also_bought') == 'on' ? 1 : 0));
+      Configuration::updateValue('product_page_similar',          (Tools::getValue('product_page_similar') == 'on' ? 1 : 0));
+      Configuration::updateValue('product_page_ineresting',       (Tools::getValue('product_page_ineresting') == 'on' ? 1 : 0));
+      Configuration::updateValue('cart_page_see_also',            (Tools::getValue('cart_page_see_also') == 'on' ? 1 : 0));
+
+      $message = $this->displayConfirmation($this->l('Ваши настройки сохранены'));
+    }
     $this->_displayContent($message);
+
+    $checked_for_home_page_popular = (Configuration::get('home_page_popular') == 1 ? 'checked="checked"' : '');
+    $checked_for_category_page_popular = (Configuration::get('category_page_popular') == 1 ? 'checked="checked"' : '');
+    $checked_for_category_page_recently_viewed = (Configuration::get('category_page_recently_viewed') == 1 ? 'checked="checked"' : '');
+    $checked_for_category_page_interesting = (Configuration::get('category_page_interesting') == 1 ? 'checked="checked"' : '');
+    $checked_for_product_page_also_bought = (Configuration::get('product_page_also_bought') == 1 ? 'checked="checked"' : '');
+    $checked_for_product_page_similar = (Configuration::get('product_page_similar') == 1 ? 'checked="checked"' : '');
+    $checked_for_product_page_ineresting = (Configuration::get('product_page_ineresting') == 1 ? 'checked="checked"' : '');
+    $checked_for_cart_page_see_also = (Configuration::get('cart_page_see_also') == 1 ? 'checked="checked"' : '');
+
+    $this->context->smarty->assign(array(
+      'checked_for_home_page_popular' => $checked_for_home_page_popular,
+      'checked_for_category_page_popular' => $checked_for_category_page_popular,
+      'checked_for_category_page_recently_viewed' => $checked_for_category_page_recently_viewed,
+      'checked_for_category_page_interesting' => $checked_for_category_page_interesting,
+      'checked_for_product_page_also_bought' => $checked_for_product_page_also_bought,
+      'checked_for_product_page_similar' => $checked_for_product_page_similar,
+      'checked_for_product_page_ineresting' => $checked_for_product_page_ineresting,
+      'checked_for_cart_page_see_also' => $checked_for_cart_page_see_also
+    ));
 
     return $this->display(__FILE__, 'settings.tpl');
   }
