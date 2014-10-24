@@ -183,7 +183,7 @@ class rees46 extends Module
           SELECT o.`id_order`, o.`id_customer`, o.`date_add`
           FROM `'._DB_PREFIX_.'orders` o
           WHERE date_add >= \''.date('Y-m-d H:i:s', strtotime('-6 month')).'\'
-          LIMIT 1000
+          LIMIT 300
         ';
         $res_orders = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
         if (!$res_orders)
