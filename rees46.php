@@ -4,7 +4,7 @@ if (!defined('_PS_VERSION_'))
 
 class rees46 extends Module
 {
-  private $hooks = array('displayHeader', 'displayProductButtons', 'actionValidateOrder', 'displayHome', 'displayTop', 'displayFooterProduct', 'displayShoppingCartFooter', 'displayAfterProductList');
+  private $hooks = array('displayHeader', 'displayProductButtons', 'actionValidateOrder', 'displayHome', 'displayTop', 'displayFooterProduct', 'displayShoppingCartFooter');
 
   function __construct() {
     $this->name = 'rees46';
@@ -55,7 +55,6 @@ class rees46 extends Module
   }
 
   public function uninstall() {
-    Db::getInstance(_PS_USE_SQL_SLAVE_)->query("DELETE FROM `"._DB_PREFIX_."hook` WHERE `name`='displayAfterProductList' AND `title`='displayAfterProductList'");
     return (parent::uninstall()
       && $this->unregisterHooks()
     );
@@ -133,13 +132,8 @@ class rees46 extends Module
     return $this->display(__FILE__, 'product_page_recommender.tpl');
   }
 
-  public function hookDisplayAfterProductList() {
-    return $this->display(__FILE__, 'category_page_footer.tpl');
-  }
-
   public function hookDisplayTop() {
-    if (Configuration::get('category_page_popular') == 1)
-      return $this->display(__FILE__, 'category_page_popular.tpl');
+    return $this->display(__FILE__, 'category_page_recommender.tpl');
   }
 
   public function hookDisplayShoppingCartFooter() {
