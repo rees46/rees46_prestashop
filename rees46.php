@@ -105,7 +105,7 @@ class rees46 extends Module
         'items_in_cart_ids' => array()
       ));
 
-    if ($this->context->cookie->isLogged()) {
+    if ($this->context->customer->isLogged()) {
       $this->context->smarty->assign(array(
         'user_id' => (int)$this->context->cookie->id_customer,
         'user_email' => $this->context->cookie->email
@@ -120,11 +120,36 @@ class rees46 extends Module
       'rees46_shop_id' => Configuration::get('MOD_REES46_SHOP_ID'),
       'rees46_secret_key' => Configuration::get('MOD_REES46_SECRET_KEY')
     ));
-    $this->context->controller->addJS('//cdn.rees46.com/rees46_script2.js', 'all');
     return $this->display(__FILE__, 'init_rees46.tpl');
   }
 
-  public function hookDisplayProductButtons() {
+  public function hookDisplayProductButtons($params) {
+    $link = new Link();
+    $product = $params['product'];
+    $isAvailable = 1;
+    if ($product->quantity == 0) {
+      $isAvailable = 0;
+    }
+    $arr_name = array_values($product->name);
+    $name = $arr_name[0];
+    $arr_description = array_values($product->description);
+    $description = $arr_description[0];
+
+    $product_link = $link->getProductLink($product);
+
+    $cover = Product::getCover($product->id);
+    $img_link = $link->getImageLink($product->link_rewrite, $cover['id_image'], 'home_default');
+
+    $this->context->smarty->assign(array(
+      'productPrice' => $product->getPrice(!Tax::excludeTaxeOption()),
+      'isAvailable' => $isAvailable,
+      'productId' => $product->id,
+      'productName' => $name,
+      'productDescription' => $description,
+      'productLink' => $product_link,
+      'productImageLink' => $img_link,
+    ));
+
     return $this->display(__FILE__, 'product_page.tpl');
   }
 

@@ -1,3 +1,4 @@
+<script type="text/javascript" src="//cdn.rees46.com/rees46_script2.js"></script>
 <script type="text/javascript">
   if ('{$item_id}' == '')
     var itemId = null;
