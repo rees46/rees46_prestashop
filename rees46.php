@@ -102,7 +102,7 @@ class rees46 extends Module
       ));
     } else
       $this->context->smarty->assign(array(
-        'items_in_cart_ids' => []
+        'items_in_cart_ids' => array()
       ));
 
     if ($this->context->cookie->isLogged()) {
@@ -158,7 +158,8 @@ class rees46 extends Module
       $item['description'] = $order_product['description_short'];
       $link = new Link();
       $item['link'] = $link->getProductLink($product);
-      $item['image_url'] = $link->getImageLink($product->link_rewrite, Product::getCover($product->id)['id_image'], 'home_default');
+      $cover = Product::getCover($product->id);
+      $item['image_url'] = $link->getImageLink($product->link_rewrite, $cover['id_image'], 'home_default');
       $product_info[] = $item;
     }
     $cookie_info = array();
