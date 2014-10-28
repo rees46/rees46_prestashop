@@ -60,7 +60,7 @@
                 var products = data.products;
 
                 $(products).each(function() {
-                  if (this.name != '') {
+                  if (this.name != '' && this.name != null) {
                     var recommend_url = this.url + recommenderType;
                     recomend_products_tpl += '<div class="recommended-item">' +
                                               '<div class="recommended-item-photo">' +
