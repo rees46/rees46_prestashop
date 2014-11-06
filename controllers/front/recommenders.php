@@ -22,7 +22,10 @@ class Rees46RecommendersModuleFrontController extends ModuleFrontController
         $recommend_product_link = $product_link.'?recommended_by=';
       }
       $cover = Product::getCover($product->id);
-      $img_link = $link->getImageLink($product->link_rewrite, $cover['id_image'], 'home_default');
+      $rewrite = $product->link_rewrite;
+      if (is_array($rewrite))
+        $rewrite = reset($rewrite);
+      $img_link = $link->getImageLink($rewrite, $cover['id_image'], 'home_default');
       if (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == "on")
         $img_link = 'https://'.$img_link;
       else

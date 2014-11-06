@@ -138,7 +138,15 @@ class rees46 extends Module
     $product_link = $link->getProductLink($product);
 
     $cover = Product::getCover($product->id);
-    $img_link = $link->getImageLink($product->link_rewrite, $cover['id_image'], 'home_default');
+    $rewrite = $product->link_rewrite;
+    if (is_array($rewrite))
+      $rewrite = reset($rewrite);
+    $img_link = $link->getImageLink($rewrite, $cover['id_image'], 'home_default');
+    if (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == "on")
+      $img_link = 'https://'.$img_link;
+    else
+      $img_link = 'http://'.$img_link;
+    $item['image_url'] = $img_link;
 
     $this->context->smarty->assign(array(
       'productPrice' => $product->getPrice(!Tax::excludeTaxeOption()),
@@ -172,6 +180,7 @@ class rees46 extends Module
     foreach ($params['order']->product_list as $order_product) {
       $item = array();
       $item['item_id'] = $order_product['id_product'];
+      $item['amount'] = $order_product['cart_quantity'];
       $product = new Product($order_product['id_product'], false);
       $item['price'] = $product->getPrice(!Tax::excludeTaxeOption());
       if ($order_product['in_stock'] == true)
@@ -183,8 +192,17 @@ class rees46 extends Module
       $item['description'] = $order_product['description_short'];
       $link = new Link();
       $item['link'] = $link->getProductLink($product);
+
       $cover = Product::getCover($product->id);
-      $item['image_url'] = $link->getImageLink($product->link_rewrite, $cover['id_image'], 'home_default');
+      $rewrite = $product->link_rewrite;
+      if (is_array($rewrite))
+        $rewrite = reset($rewrite);
+      $img_link = $link->getImageLink($rewrite, $cover['id_image'], 'home_default');
+      if (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == "on")
+        $img_link = 'https://'.$img_link;
+      else
+        $img_link = 'http://'.$img_link;
+      $item['image_url'] = $img_link;
       $product_info[] = $item;
     }
     $cookie_info = array();
