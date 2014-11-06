@@ -18,8 +18,6 @@
 
   function initREES46() {
     $(function() {
-      REES46.addStyleToPage();
-
       var shopId = '{$rees46_shop_id}';
       if (shopId != '') {
         var logged = '{$logged}';
@@ -35,6 +33,7 @@
       }
 
       REES46.addReadyListener(function () {
+        REES46.addStyleToPage();
         $('.rees46').each(function() {
           var recommenderBlock = $(this);
           var recommenderType = recommenderBlock.data('type');
