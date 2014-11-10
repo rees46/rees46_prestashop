@@ -12,6 +12,7 @@ class rees46 extends Module
     $this->version = '1';
     $this->author = 'mkechinov';
     $this->need_instance = 0;
+    $this->module_key = 'b62df9df084ba63e7aa2ef146fe85c84';
 
     parent::__construct();
 
