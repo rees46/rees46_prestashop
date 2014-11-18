@@ -1,30 +1,55 @@
+{*
+* 2007-2014 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    Servilovskiy Sergey <sergey.servilovsky@mkechinov.ru>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*}
+
 <script type="text/javascript">
-  if ('{$item_id}' == '')
+  if ("{$item_id|escape:'htmlall':'UTF-8'}" == "")
     var itemId = null;
   else
-    var itemId = '{$item_id}';
+    var itemId = "{$item_id|escape:'htmlall':'UTF-8'}";
 
-  if ('{$category_id}' == '')
+  if ("{$category_id|escape:'htmlall':'UTF-8'}" == "")
     var categoryId = null;
   else
-    var categoryId = '{$category_id}';
+    var categoryId = "{$category_id|escape:'htmlall':'UTF-8'}";
 
   var itemsInCartIds = [];
   {foreach $items_in_cart_ids as $id}
-    itemsInCartIds.push({$id})
+    itemsInCartIds.push({$id|escape:'htmlall':'UTF-8'})
   {/foreach}
   if (itemsInCartIds.length == 0)
     itemsInCartIds = null;
 
   function initREES46() {
     $(function() {
-      var shopId = '{$rees46_shop_id}';
+      var shopId = "{$rees46_shop_id|escape:'htmlall':'UTF-8'}";
       if (shopId != '') {
-        var logged = '{$logged}';
+        var logged = "{$logged|escape:'htmlall':'UTF-8'}";
         if (logged != '') {
           var userInfo = {
-            'id': '{$user_id}',
-            'email': '{$user_email}'
+            'id': "{$user_id|escape:'htmlall':'UTF-8'}",
+            'email': "{$user_email|escape:'htmlall':'UTF-8'}"
           };
           REES46.init(shopId, userInfo);
         } else {
