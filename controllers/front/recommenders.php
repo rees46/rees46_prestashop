@@ -33,22 +33,31 @@ class Rees46RecommendersModuleFrontController extends ModuleFrontController
 	{
 		$ids = array_map('intval', explode(',', $_REQUEST['product_ids']));
 		$products = array();
+		$disabled_product_ids = array();
 
 		foreach ($ids as $id)
 		{
 			$product = new Product($id, false);
+			if ($product->name == null)
+			{
+				array_push($disabled_product_ids, $id);
+				continue;
+			}
 			$link = new Link();
-			$product_link = $link->getProductLink($product);
+			$cover = Product::getCover($product->id);
+			$rewrite = $product->link_rewrite;
+			if (is_array($rewrite))
+				$rewrite = reset($rewrite);
+			if ((bool)Configuration::get('PS_REWRITING_SETTINGS'))
+				$product_link = $link->getProductLink((int)$id, $rewrite, $product->category, $product->ean13, null, null, 0, true);
+			else
+				$product_link = $link->getProductLink($product);
 			$query = parse_url($product_link, PHP_URL_QUERY);
 
 			if ($query)
 				$recommend_product_link = $product_link.'&recommended_by=';
 			else
 				$recommend_product_link = $product_link.'?recommended_by=';
-			$cover = Product::getCover($product->id);
-			$rewrite = $product->link_rewrite;
-			if (is_array($rewrite))
-				$rewrite = reset($rewrite);
 			$img_link = $link->getImageLink($rewrite, $cover['id_image']);
 			if (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on')
 				$img_link = 'https://'.$img_link;
@@ -62,6 +71,27 @@ class Rees46RecommendersModuleFrontController extends ModuleFrontController
 				'image_url' => $img_link
 			);
 			array_push($products, $p);
+		}
+		if (!empty($disabled_product_ids))
+		{
+			$options = array(
+				CURLOPT_URL            => 'http://api.rees46.com/import/disable?
+																	shop_id='.Configuration::get('MOD_REES46_SHOP_ID').'&
+																	shop_secret='.Configuration::get('MOD_REES46_SECRET_KEY').'&
+																	item_ids='.implode(',', $disabled_product_ids),
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_HEADER         => false,
+				CURLOPT_FOLLOWLOCATION => false,
+				CURLOPT_ENCODING       => '',
+				CURLOPT_USERAGENT      => 'spider',
+				CURLOPT_AUTOREFERER    => true,
+				CURLOPT_CONNECTTIMEOUT => 2,
+				CURLOPT_TIMEOUT        => 2,
+				CURLOPT_MAXREDIRS      => 10
+			);
+			$ch = curl_init();
+			curl_setopt_array( $ch, $options );
+			curl_exec($ch);
 		}
 
 		header('Content-Type: application/json');

@@ -34,7 +34,6 @@
         var recently_viewed = $('<div>', {
           class: 'rees46 rees46-recommend',
           data: {
-            limit: 4,
             type: 'recently_viewed'
           }
         });
@@ -48,7 +47,6 @@
         var interesting = $('<div>', {
           class: 'rees46 rees46-recommend',
           data: {
-            limit: 4,
             type: 'interesting'
           }
         });

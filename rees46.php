@@ -26,6 +26,7 @@
 
 if (!defined('_PS_VERSION_'))
 	exit;
+function_exists('curl_init');
 
 class Rees46 extends Module
 {
