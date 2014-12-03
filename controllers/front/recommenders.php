@@ -38,7 +38,7 @@ class Rees46RecommendersModuleFrontController extends ModuleFrontController
 		foreach ($ids as $id)
 		{
 			$product = new Product($id, false);
-			if ($product->name == null)
+			if ($product->name == null || !$product->active || !$product->available_for_order)
 			{
 				array_push($disabled_product_ids, $id);
 				continue;
