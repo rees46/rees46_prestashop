@@ -64,10 +64,15 @@ class Rees46RecommendersModuleFrontController extends ModuleFrontController
 			else
 				$img_link = 'http://'.$img_link;
 			$arr_name = array_values($product->name);
+			$product_price = 0;
+			if ($product->getPrice(!Tax::excludeTaxeOption(), null, 2) > 100)
+				$product_price = round($product->getPrice(!Tax::excludeTaxeOption(), null, 2));
+			else
+				$product_price = $product->getPrice(!Tax::excludeTaxeOption(), null, 2);
 			$p = Array(
 				'name' => $arr_name[0],
 				'url' => $recommend_product_link,
-				'price' => $product->getPrice(!Tax::excludeTaxeOption(), null, 2),
+				'price' => $product_price,
 				'image_url' => $img_link
 			);
 			array_push($products, $p);
