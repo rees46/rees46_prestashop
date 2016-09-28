@@ -37,7 +37,7 @@ class Rees46 extends Module
 	{
 		$this->name = 'rees46';
 		$this->tab = 'front_office_features';
-		$this->version = '1.0.4';
+		$this->version = '1.0.5';
 		$this->author = 'Servilovskiy Sergey <sergey.servilovsky@mkechinov.ru>';
 		$this->need_instance = 0;
 		$this->module_key = 'b62df9df084ba63e7aa2ef146fe85c84';

@@ -181,16 +181,21 @@
     });
   };
 
-  var script = document.createElement('script');
-  script.src = '//cdn.rees46.com/rees46_script2.js';
-  script.async = true;
-  script.onload = function() {
-    initREES46();
-    {if $page_name == 'product'}
-      REES46.addReadyListener(function(){
-        viewProductREES46();
-      });
-    {/if}
-  };
-  document.getElementsByTagName('head')[0].appendChild(script);
+  if (typeof REES46_already_loaded == "undefined") {
+    var REES46_already_loaded = true;
+    var script = document.createElement('script');
+    script.src = '//cdn.rees46.com/rees46_script2.js';
+    script.async = true;
+    script.onload = function() {
+      initREES46();
+      {if $page_name == 'product'}
+        REES46.addReadyListener(function(){
+          viewProductREES46();
+        });
+      {/if}
+    };
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+
 </script>
