@@ -4,7 +4,7 @@
 
 English documentation: [http://docs.rees46.com/display/en/PrestaShop+Module](http://docs.rees46.com/display/en/PrestaShop+Module)
 
-Русская документация: [http://docs.rees46.com/pages/viewpage.action?pageId=1835241](http://docs.rees46.com/pages/viewpage.action?pageId=1835241)
+Русская документация: [http://docs.rees46.com/pages/viewpage.action?pageId=7639577](http://docs.rees46.com/pages/viewpage.action?pageId=7639577)
 
 ## Совместимость
 
