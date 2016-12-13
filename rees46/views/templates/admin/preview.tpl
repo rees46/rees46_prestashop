@@ -23,11 +23,6 @@
  *  International Registered Trademark & Property of PrestaShop SA
  *}
 
-<section class="featured-products clearfix">
-  <h3 class="products-section-title text-uppercase">{$rees46_title|escape:'htmlall':'UTF-8'}</h3>
-  <div class="products">
-    {foreach from=$rees46_products item='product'}
-      {include file="catalog/_partials/miniatures/product.tpl" product=$product}
-    {/foreach}
-  </div>
-</section>
+<div style="margin: 0 0 20px 0; text-align: center;">
+	<img src="../modules/rees46/views/img/admin/banner_{$rees46_lang}.png">
+</div>

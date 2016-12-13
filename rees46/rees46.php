@@ -20,7 +20,7 @@
  *
  *  @author    p0v1n0m <ay@rees46.com>
  *  @copyright 2007-2016 PrestaShop SA
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -33,7 +33,7 @@ use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
 
 class Rees46 extends Module
 {
-    protected static $fields = array(
+    protected $fields = array(
         'REES46_STORE_KEY',
         'REES46_SECRET_KEY',
         'REES46_LOG_STATUS',
@@ -46,7 +46,7 @@ class Rees46 extends Module
         'REES46_CUSTOMER_TYPE',
     );
 
-    protected static $hooks = array(
+    protected $hooks = array(
         'header',
         'actionProductAdd',
         'actionProductUpdate',
@@ -65,7 +65,7 @@ class Rees46 extends Module
         'displaySearch',
     );
 
-    protected static $recommends = array(
+    protected $recommends = array(
         'interesting' => 'You may like it',
         'also_bought' => 'Also bought with this product',
         'similar' => 'Similar products',
@@ -83,20 +83,20 @@ class Rees46 extends Module
         $this->version = '2.0.0';
         $this->author = 'REES46';
         $this->need_instance = 0;
-
         $this->bootstrap = true;
         $this->display = 'view';
-        $this->meta_title = $this->l('REES46');
         $this->module_key = 'b62df9df084ba63e7aa2ef146fe85c84';
+        $this->ps_versions_compliancy = array(
+            'min' => '1.5.0.0',
+            'max' => _PS_VERSION_,
+        );
 
         parent::__construct();
 
         $this->displayName = $this->l('REES46');
         $this->description = $this->l('eCommerce marketing automation suite.');
-        $this->ps_versions_compliancy = array(
-            'min' => '1.5.0.0',
-            'max' => _PS_VERSION_,
-        );
+
+        $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
     }
 
     public function install()
@@ -121,9 +121,9 @@ class Rees46 extends Module
         }
     }
 
-    private function updateFields()
+    protected function updateFields()
     {
-        foreach (Rees46::$fields as $field) {
+        foreach ($this->fields as $field) {
             if (!Configuration::updateValue($field, '')) {
                 $this->_errors[] = Tools::displayError('Failed to update value: ' . $field . '.');
 
@@ -134,9 +134,9 @@ class Rees46 extends Module
         return true;
     }
 
-    private function deleteFields()
+    protected function deleteFields()
     {
-        foreach (Rees46::$fields as $field) {
+        foreach ($this->fields as $field) {
             if (!Configuration::deleteByName($field)) {
                 $this->_errors[] = Tools::displayError('Failed to delete value: ' . $field . '.');
 
@@ -153,9 +153,9 @@ class Rees46 extends Module
         return true;
     }
 
-    private function registerHooks()
+    protected function registerHooks()
     {
-        foreach (Rees46::$hooks as $hook) {
+        foreach ($this->hooks as $hook) {
             if (!$this->registerHook($hook)) {
                 $this->_errors[] = Tools::displayError('Failed to install hook: ' . $hook . '.');
 
@@ -166,9 +166,9 @@ class Rees46 extends Module
         return true;
     }
 
-    private function unregisterHooks()
+    protected function unregisterHooks()
     {
-        foreach (Rees46::$hooks as $hook) {
+        foreach ($this->hooks as $hook) {
             if (!$this->unregisterHook($hook)) {
                 $this->_errors[] = Tools::displayError('Failed to uninstall hook: ' . $hook . '.');
 
@@ -358,114 +358,6 @@ class Rees46 extends Module
             $js = 'r46(\'track\', \'purchase\', ' . Tools::jsonEncode($js_data) . ');';
 
             $this->context->cookie->__set('rees46_purchase', $this->context->cookie->rees46_purchase . $js);
-
-            $order_id = $params['order']->id;
-            $order_status_id = $params['orderStatus']->id;
-
-            $rees46_order_created = Tools::jsonDecode(Configuration::get('REES46_ORDER_CREATED'), true);
-            $rees46_order_completed = Tools::jsonDecode(Configuration::get('REES46_ORDER_COMPLETED'), true);
-            $rees46_order_cancelled = Tools::jsonDecode(Configuration::get('REES46_ORDER_CANCELLED'), true);
-
-            if ($rees46_order_created && in_array($order_status_id, $rees46_order_created)) {
-                $status = 0;
-            } elseif ($rees46_order_completed && in_array($order_status_id, $rees46_order_completed)) {
-                $status = 1;
-            } elseif ($rees46_order_cancelled && in_array($order_status_id, $rees46_order_cancelled)) {
-                $status = 2;
-            }
-
-            if (isset($status)) {
-                $order_products = array();
-
-                foreach ($params['order']->product_list as $order_product) {
-                    $product = new Product($order_product['id_product'], false);
-
-                    $order_products[] = array(
-                        'id' => $order_product['id_product'],
-                        'price' => Product::getPriceStatic(
-                            (int)$order_product['id_product'],
-                            true,
-                            ($order_product['id_product_attribute']?(int)$order_product['id_product_attribute'] : null),
-                            2,
-                            null,
-                            false,
-                            true,
-                            1,
-                            false,
-                            (int)$params['order']->id_customer,
-                            (int)$params['order']->id_cart,
-                            (int)$params['order']->{Configuration::get('PS_TAX_ADDRESS_TYPE')}
-                        ),
-                        'categories' => $product->getCategories(),
-                        'is_available' => $order_product['in_stock'],
-                        'amount' => $order_product['cart_quantity'],
-                    );
-                }
-
-                $data = array();
-
-                $data[] = array(
-                    'id' => $order_id,
-                    'user_id' => $params['customer']->id,
-                    'user_email' => $params['customer']->email,
-                    'date' => strtotime($params['order']->date_add),
-                    'items' => $order_products,
-                );
-
-                $curl_data = array();
-
-                $curl_data['shop_id'] = Configuration::get('REES46_STORE_KEY');
-                $curl_data['shop_secret'] = Configuration::get('REES46_SECRET_KEY');
-                $curl_data['orders'] = $data;
-
-                $url = 'http://api.rees46.com/import/orders';
-
-                $return = $this->curl($url, Tools::jsonEncode($curl_data));
-
-                if (Configuration::get('REES46_LOG_STATUS')) {
-                    if ($return['info']['http_code'] < 200 || $return['info']['http_code'] >= 300) {
-                        if (version_compare(_PS_VERSION_, '1.6', '<')) {
-                            Logger::addLog(
-                                'REES46: Autoexport order_id [' . $order_id . ']',
-                                3,
-                                $return['info']['http_code'],
-                                null,
-                                null,
-                                true
-                            );
-                        } else {
-                            PrestaShopLogger::addLog(
-                                'REES46: Autoexport order_id [' . $order_id . ']',
-                                3,
-                                $return['info']['http_code'],
-                                null,
-                                null,
-                                true
-                            );
-                        }
-                    } else {
-                        if (version_compare(_PS_VERSION_, '1.6', '<')) {
-                            Logger::addLog(
-                                'REES46: Autoexport order_id [' . $order_id . ']',
-                                1,
-                                null,
-                                null,
-                                null,
-                                true
-                            );
-                        } else {
-                            PrestaShopLogger::addLog(
-                                'REES46: Autoexport order_id [' . $order_id . ']',
-                                1,
-                                null,
-                                null,
-                                null,
-                                true
-                            );
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -594,7 +486,7 @@ class Rees46 extends Module
         return $this->getModules('displaySearch');
     }
 
-    private function getModules($hook)
+    protected function getModules($hook)
     {
         if (Configuration::get('REES46_STORE_KEY') != ''
             && Configuration::get('REES46_SECRET_KEY') != ''
@@ -771,7 +663,7 @@ class Rees46 extends Module
             $module_values = Tools::jsonDecode(Configuration::get('REES46_MODULE_' . $module_id), true);
 
             if ($module_values['title'][$this->context->language->id] == '') {
-                $title = $this->l(Rees46::$recommends[$module_values['type']]);
+                $title = $this->l($this->recommends[$module_values['type']]);
             } else {
                 $title = $module_values['title'][$this->context->language->id];
             }
@@ -955,7 +847,7 @@ class Rees46 extends Module
         if (Tools::isSubmit('submit' . $this->name)) {
             $this->_clearCache('*');
 
-            foreach (Rees46::$fields as $field) {
+            foreach ($this->fields as $field) {
                 if ('REES46_ORDER' == Tools::substr($field, 0, 12)) {
                     Configuration::updateValue($field, Tools::jsonEncode(Tools::getValue($field)));
                 } else {
@@ -999,7 +891,7 @@ class Rees46 extends Module
 
             $output .= $this->displayConfirmation($this->l('The settings have been successfully updated.'));
 
-            $output .= $this->renderForm().$this->renderList().$this->renderFormHelp();
+            $output .= $this->displayPreview().$this->renderForm().$this->renderList().$this->renderFormHelp();
         } elseif (Tools::isSubmit('submit_module')) { // save module
             Configuration::updateValue('REES46_MODULE_' . Tools::getValue('id_module'), Tools::jsonEncode(
                 $this->getModuleValues()
@@ -1007,7 +899,7 @@ class Rees46 extends Module
 
             $output .= $this->displayConfirmation($this->l('The settings have been successfully updated.'));
 
-            $output .= $this->renderForm().$this->renderList().$this->renderFormHelp();
+            $output .= $this->displayPreview().$this->renderForm().$this->renderList().$this->renderFormHelp();
         } elseif (Tools::isSubmit('deletemodule')
             && Tools::isSubmit('id_module')
             && Configuration::get('REES46_MODULE_' . Tools::getValue('id_module'))
@@ -1016,20 +908,29 @@ class Rees46 extends Module
 
             $output .= $this->displayConfirmation($this->l('The settings have been successfully updated.'));
 
-            $output .= $this->renderForm().$this->renderList().$this->renderFormHelp();
+            $output .= $this->displayPreview().$this->renderForm().$this->renderList().$this->renderFormHelp();
         } elseif (Tools::isSubmit('new_module')
             || (Tools::isSubmit('id_module')
             && Configuration::get('REES46_MODULE_' . Tools::getValue('id_module')))
         ) { // view module
             $output .= $this->renderFormModule();
         } else {
-            $output .= $this->renderForm().$this->renderList().$this->renderFormHelp();
+            $output .= $this->displayPreview().$this->renderForm().$this->renderList().$this->renderFormHelp();
         }
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_URL, 'https://rees46.com/trackcms/prestashop?domain=' . _PS_BASE_URL_ . __PS_BASE_URI__);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_exec($ch);
+        curl_close($ch);
 
         return $output;
     }
 
-    public function renderForm()
+    protected function renderForm()
     {
         $fields_form = array();
 
@@ -1040,7 +941,10 @@ class Rees46 extends Module
             ),
             'description' => (Configuration::get('REES46_STORE_KEY') == ''
                 || Configuration::get('REES46_SECRET_KEY') == '')
-                ? $this->l('To start using this module, please register an account on rees46.com.')
+                ? $this->l('To start using this module, please register an account on')
+                . ' <a href="https://rees46.com/prestashop" target="_blank">rees46.com'
+                . ' <i class="icon-external-link"></i></a> '
+                . $this->l('and get API keys for this form.')
                 : false,
             'input' => array(
                 array(
@@ -1310,7 +1214,7 @@ class Rees46 extends Module
             );
         }
 
-        foreach (Rees46::$fields as $field) {
+        foreach ($this->fields as $field) {
             if ('REES46_XML_CRON' == $field) {
                 $xml_cron = _PS_BASE_URL_ . __PS_BASE_URI__ . 'index.php?fc=module&module=rees46&controller=cron';
 
@@ -1335,7 +1239,7 @@ class Rees46 extends Module
         return $helper->generateForm($fields_form);
     }
 
-    public function renderList()
+    protected function renderList()
     {
         $content = $this->getListValues();
 
@@ -1401,7 +1305,7 @@ class Rees46 extends Module
         return $helper->generateList($content, $fields_list);
     }
 
-    private function getListValues()
+    protected function getListValues()
     {
         $list_values = array();
 
@@ -1416,7 +1320,7 @@ class Rees46 extends Module
                 $list_values[] = array(
                     'id_module' => $module_values['id_module'],
                     'hook' => $module_values['hook'],
-                    'type' => $this->l(Rees46::$recommends[$module_values['type']]),
+                    'type' => $this->l($this->recommends[$module_values['type']]),
                     'position' => $module_values['position'],
                     'status' => $module_values['status'],
                 );
@@ -1428,7 +1332,7 @@ class Rees46 extends Module
         return $list_values;
     }
 
-    public function renderFormHelp()
+    protected function renderFormHelp()
     {
         $fields_form = array();
 
@@ -1437,9 +1341,18 @@ class Rees46 extends Module
                 'title' => $this->l('Help'),
                 'icon' => 'icon-comments',
             ),
-            'description' => $this->l('Documentation: ')
-            . '<a href="' . $this->l('http://docs.rees46.com/display/en/PrestaShop+Module') . '" target="_blank">'
-            .$this->l('http://docs.rees46.com/display/en/PrestaShop+Module').' <i class="icon-external-link"></i></a>',
+            'description' => $this->l('Documentation:')
+                . ' <a href="'
+                . $this->l('http://docs.rees46.com/display/en/PrestaShop+Module')
+                . '" target="_blank">'
+                . $this->l('http://docs.rees46.com/display/en/PrestaShop+Module')
+                . ' <i class="icon-external-link"></i></a><br><br>'
+                . $this->l('Support:')
+                . ' <a href="'
+                . $this->l('https://addons.prestashop.com/en/contact-us?id_product=18056')
+                . '" target="_blank">'
+                . $this->l('https://addons.prestashop.com/en/contact-us?id_product=18056')
+                . ' <i class="icon-external-link"></i></a>',
         );
 
         $helper = new HelperForm();
@@ -1466,7 +1379,7 @@ class Rees46 extends Module
         return $helper->generateForm($fields_form);
     }
 
-    public function renderFormModule()
+    protected function renderFormModule()
     {
         $images_types = ImageType::getImagesTypes('products');
 
@@ -1747,7 +1660,7 @@ class Rees46 extends Module
         return $helper->generateForm($fields_form);
     }
 
-    private function getModuleValues()
+    protected function getModuleValues()
     {
         $module_values = array();
 
@@ -1822,6 +1735,20 @@ class Rees46 extends Module
         }
 
         return $module_values;
+    }
+
+    protected function displayPreview()
+    {
+        $language = new Language((int)$this->context->language->id);
+
+        $this->context->smarty->assign(
+            array(
+                'rees46_lang' => $language->iso_code
+
+            )
+        );
+
+        return $this->display(__FILE__, 'views/templates/admin/preview.tpl');
     }
 
     public function ajaxProcessExportOrders()
@@ -2160,7 +2087,7 @@ class Rees46 extends Module
         echo Tools::jsonEncode($json);
     }
 
-    private function getTotalOrders()
+    protected function getTotalOrders()
     {
         $query = new DbQuery();
         $query->select('COUNT(*) AS total');
@@ -2210,7 +2137,7 @@ class Rees46 extends Module
         }
     }
 
-    private function getOrders($data = array())
+    protected function getOrders($data = array())
     {
         $query = new DbQuery();
         $query->select('o.`id_order`, o.`id_customer`, c.`email`, o.`current_state`, o.`date_add`');
@@ -2271,7 +2198,7 @@ class Rees46 extends Module
         }
     }
 
-    private function getOrderProducts($id_order)
+    protected function getOrderProducts($id_order)
     {
         $query = new DbQuery();
         $query->select('od.`product_id`, od.`total_price_tax_incl`, od.`product_quantity`, sa.`quantity`');
@@ -2289,7 +2216,7 @@ class Rees46 extends Module
         return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($query->build());
     }
 
-    private function getTotalCustomers()
+    protected function getTotalCustomers()
     {
         $query = new DbQuery();
         $query->select('COUNT(*) AS total');
@@ -2308,7 +2235,7 @@ class Rees46 extends Module
         return $result[0]['total'];
     }
 
-    private function getCustomers($data = array())
+    protected function getCustomers($data = array())
     {
         $query = new DbQuery();
         $query->select('c.`id_customer`, c.`email`');
@@ -2337,7 +2264,7 @@ class Rees46 extends Module
         return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($query->build());
     }
 
-    private function curlDisable($product_id)
+    protected function curlDisable($product_id)
     {
         $url = 'http://api.rees46.com/import/disable';
 
@@ -2394,7 +2321,7 @@ class Rees46 extends Module
         }
     }
 
-    private function curl($url, $params)
+    protected function curl($url, $params)
     {
         $ch = curl_init();
 

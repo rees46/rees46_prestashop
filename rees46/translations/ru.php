@@ -7,7 +7,8 @@ $_MODULE['<{rees46}prestashop>rees46_d494c7e053e0015c7f30f791bad5c938'] = 'Це�
 $_MODULE['<{rees46}prestashop>rees46_d3da97e2d9aee5c8fbe03156ad051c99'] = 'Подробнее';
 $_MODULE['<{rees46}prestashop>rees46_6483df61619946ebf2427ba360df7ce5'] = 'Настройки успешно обновлены.';
 $_MODULE['<{rees46}prestashop>rees46_0db377921f4ce762c62526131097968f'] = 'Общее';
-$_MODULE['<{rees46}prestashop>rees46_c10c13f3d85b1bf9cf0fbb4bf65a902f'] = 'Для использования модуля необходимо зарегистрироваться на сайте rees46.com.';
+$_MODULE['<{rees46}prestashop>rees46_47ab87a84d5870d02f122e892c846a7d'] = 'Чтобы начать использовать этот модуль, пожалуйста, зарегистрируйтесь на';
+$_MODULE['<{rees46}prestashop>rees46_8fc1f0715f769b6a935ec6732dde1dbd'] = 'и получите ключи API для этой формы.';
 $_MODULE['<{rees46}prestashop>rees46_29f3e237041f6a80eec0869d832dc8a8'] = 'Store Key';
 $_MODULE['<{rees46}prestashop>rees46_5eb6bb157528b365f84c27bb4784031b'] = 'Secret Key';
 $_MODULE['<{rees46}prestashop>rees46_8db7df66ab1d7ab5f1dc947acdb5fae4'] = 'Логирование';
@@ -46,8 +47,10 @@ $_MODULE['<{rees46}prestashop>rees46_cf353f9bc91f6b3ba7b1b06a181e7c7f'] = 'Ст�
 $_MODULE['<{rees46}prestashop>rees46_5259ae4afb5996ff48788b2fa720114c'] = 'Рекомендации';
 $_MODULE['<{rees46}prestashop>rees46_ec211f7c20af43e742bf2570c3cb84f9'] = 'Добавить';
 $_MODULE['<{rees46}prestashop>rees46_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Помощь';
-$_MODULE['<{rees46}prestashop>rees46_7995a6f780b11416546cb18918cc3f3b'] = 'Документация: ';
+$_MODULE['<{rees46}prestashop>rees46_8faa7616b66ec7990abd90e6eb970b03'] = 'Документация:';
 $_MODULE['<{rees46}prestashop>rees46_4992d553c02c6ce1790b49b33a7c5670'] = 'http://docs.rees46.com/pages/viewpage.action?pageId=7639577';
+$_MODULE['<{rees46}prestashop>rees46_15503247e4b9edbe6a01e08b4850da7c'] = 'Поддержка:';
+$_MODULE['<{rees46}prestashop>rees46_cf4e7bc72eb716769a6abc5513ea3297'] = 'https://addons.prestashop.com/ru/contact-us?id_product=18056';
 $_MODULE['<{rees46}prestashop>rees46_e1c5367175e7f9934b18ce1cd4b53024'] = 'Блок рекомендаций';
 $_MODULE['<{rees46}prestashop>rees46_d412701c5d2d025a0a5f4c5da40d945f'] = 'Возможно, вам это понравится';
 $_MODULE['<{rees46}prestashop>rees46_949e9c442b5128613c29d8a3b3857e25'] = 'С этим товаром покупают';
