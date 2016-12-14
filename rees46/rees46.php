@@ -28,8 +28,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use PrestaShop\PrestaShop\Adapter\Product\ProductDataProvider;
-use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
+//use PrestaShop\PrestaShop\Adapter\Product\ProductDataProvider;
+//use PrestaShop\PrestaShop\Adapter\Image\ImageRetriever;
 
 class Rees46 extends Module
 {
