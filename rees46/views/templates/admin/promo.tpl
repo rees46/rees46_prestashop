@@ -24,5 +24,7 @@
  *}
 
 <div style="margin: 0 0 20px 0; text-align: center;">
-	<img src="../modules/rees46/views/img/admin/banner_{$rees46_lang}.png">
+  <a href="https://rees46.com/prestashop" target="_blank">
+  	<img src="../modules/rees46/views/img/admin/banner_{$rees46_lang|escape:'htmlall':'UTF-8'}.png">
+  </a>
 </div>

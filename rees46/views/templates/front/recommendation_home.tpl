@@ -24,7 +24,7 @@
  *}
 
 <section class="featured-products clearfix">
-  <h3 class="products-section-title text-uppercase">{$rees46_title|escape:'htmlall':'UTF-8'}</h3>
+  <h3 class="products-section-title text-uppercase">{$rees46_title}</h3>
   <div class="products">
     {foreach from=$rees46_products item="product"}
       <article class="product-miniature js-product-miniature" data-id-product="{$product.id_product}" data-id-product-attribute="{$product.id_product_attribute}" itemscope itemtype="http://schema.org/Product">
@@ -40,26 +40,21 @@
           {/block}
           <div class="product-description">
             {block name='product_name'}
-              <h1 class="h3 product-title" itemprop="name"><a href="{$product.url}">{$product.name|truncate:30:'...'}</a></h1>
+              <h1 class="h3 product-title" itemprop="name"><a href="{$product.url}">{$product.name}</a></h1>
             {/block}
             {block name='product_price_and_shipping'}
               {if $product.show_price}
                 <div class="product-price-and-shipping">
                   {if $product.has_discount}
                     {hook h='displayProductPriceBlock' product=$product type="old_price"}
-
                     <span class="regular-price">{$product.regular_price}</span>
                     {if $product.discount_type === 'percentage'}
                       <span class="discount-percentage">{$product.discount_percentage}</span>
                     {/if}
                   {/if}
-
                   {hook h='displayProductPriceBlock' product=$product type="before_price"}
-
                   <span itemprop="price" class="price">{$product.price}</span>
-
                   {hook h='displayProductPriceBlock' product=$product type='unit_price'}
-
                   {hook h='displayProductPriceBlock' product=$product type='weight'}
                 </div>
               {/if}
@@ -78,7 +73,7 @@
               class="quick-view"
               data-link-action="quickview"
             >
-              <i class="material-icons search">&#xE8B6;</i> {l s='Quick view' d='Shop.Theme.Actions'}
+              <i class="material-icons search">&#xE8B6;</i> {$rees46_quick}
             </a>
             {block name='product_variants'}
               {if $product.main_variants}

@@ -30,15 +30,15 @@
             {foreach from=$rees46_products item=product name=product}
                 <li class="product-box item">
                     <a class="lnk_img product-image" href="{$product.link|escape:'htmlall':'UTF-8'}">
-                        <img src="{$product.image}" alt="{$product.name|htmlspecialchars}" title="{$product.name|htmlspecialchars}" />
+                        <img src="{$product.image|escape:'htmlall':'UTF-8'}" alt="{$product.name|escape:'htmlall':'UTF-8'}" title="{$product.name|escape:'htmlall':'UTF-8'}" />
                     </a>
                     <div class="s_title_block">
                         <h5 class="product-name">
                             <a href="{$product.link|escape:'htmlall':'UTF-8'}">
-                                {$product.name|truncate:15:'...'|escape:'htmlall':'UTF-8'}
+                                {$product.name|escape:'htmlall':'UTF-8'}
                             </a>
                         </h5>
-                        <p class="product-description">{$product.description_short|strip_tags:'UTF-8'|truncate:50:'...'}</p>
+                        <p class="product-description">{$product.description_short|escape:'htmlall':'UTF-8'}</p>
                     </div>
                     {if (!$PS_CATALOG_MODE AND ((isset($product.show_price) && $product.show_price) || (isset($product.available_for_order) && $product.available_for_order)))}
                         {if isset($product.show_price) && $product.show_price && !isset($restricted_country_mode)}

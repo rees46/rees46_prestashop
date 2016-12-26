@@ -23,18 +23,21 @@
  *  International Registered Trademark & Property of PrestaShop SA
  *}
 
-{foreach from=$rees46_modules item="module"}
-<!-- REES46 Recommendation Module {$module.id_module} -->
-<script type="text/javascript">
-{if {$rees46_css}}
-r46('add_css', 'recommendations');
-{/if}
-r46('recommend', '{$module.type}', {$module.params|@json_encode nofilter}, function(results) {
-  if (results.length > 0) {
-    $('#rees46-recommended-{$module.id_module}').load('{$module.link}?fc=module&ajax=1&module_id={$module.id_module}&product_ids=' + results);
-  }
-});
-</script>
-<div id="rees46-recommended-{$module.id_module}" class="clearfix"></div>
-<!-- /REES46 Recommendation Module {$module.id_module} -->
-{/foreach}
+<style>
+#auth_form #fieldset_0, #auth_form #fieldset_1 {
+  display: none;
+}
+</style>
+<fieldset id="fieldset_auth">
+  <div class="pull-left" style="width: 50%; float: left; text-align: center;">
+    <button type="submit" id="rees46_login" class="button btn btn-primary center-block">
+      <i class="icon-key"></i> {$rees46_authorize|escape:'htmlall':'UTF-8'}
+    </button>
+  </div>
+  <div class="pull-right" style="width: 50%; float: right; text-align: center;">
+    <button type="submit" id="rees46_register" class="button btn btn-primary center-block">
+      <i class="icon-plus-sign"></i> {$rees46_register|escape:'htmlall':'UTF-8'}
+    </button>
+  </div>
+  <div style="clear: both;"></div>
+</fieldset>

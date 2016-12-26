@@ -1,5 +1,4 @@
-<?php
-/**
+{*
  * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -22,16 +21,18 @@
  *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
- */
+ *}
 
-class Rees46RecommendationsModuleFrontController extends ModuleFrontController
-{
-    public function initContent()
-    {
-        parent::initContent();
-
-        if (Tools::getValue('ajax') && Tools::getValue('module_id') && Tools::getValue('product_ids')) {
-            die($this->module->getProducts(Tools::getValue('module_id'), Tools::getValue('product_ids')));
-        }
-    }
-}
+{foreach from=$rees46_modules item=module}
+<script type="text/javascript">
+{if {$rees46_css}}
+r46('add_css', 'recommendations');
+{/if}
+r46('recommend', '{$module.type}', {$module.params|json_encode nofilter}, function(results) {
+  if (results.length > 0) {
+    $('#rees46-recommended-{$module.id_module}').load('{$module.link}?fc=module&ajax=1&module_id={$module.id_module}&product_ids=' + results);
+  }
+});
+</script>
+<div id="rees46-recommended-{$module.id_module}" class="clearfix"></div>
+{/foreach}

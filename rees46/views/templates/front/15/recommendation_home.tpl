@@ -31,7 +31,7 @@
         {assign var='nbLi' value=$rees46_products|@count}
         {math equation="nbLi/nbItemsPerLine" nbLi=$nbLi nbItemsPerLine=$nbItemsPerLine assign=nbLines}
         {math equation="nbLines*liHeight" nbLines=$nbLines|ceil liHeight=$liHeight assign=ulHeight}
-        <ul style="height:{$ulHeight}px;">
+        <ul style="height:{$ulHeight|escape:'htmlall':'UTF-8'}px;">
         {foreach from=$rees46_products item=product name=product}
             {math equation="(total%perLine)" total=$smarty.foreach.product.total perLine=$nbItemsPerLine assign=totModulo}
             {if $totModulo == 0}{assign var='totModulo' value=$nbItemsPerLine}{/if}

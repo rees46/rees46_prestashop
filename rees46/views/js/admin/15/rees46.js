@@ -24,21 +24,28 @@
  */
 
 $(document).ready(function() {
+	$('#auth_toolbar #desc-auth-new').css('display', 'none');
+	$('#auth_toolbar #desc-auth-newAttributes').css('display', 'none');
+
     $('#rees46_login').click(function() {
-        $('#fieldset_1_1').css('display', 'none');
-        $('#fieldset_0').fadeIn();
+        $('#auth_form #fieldset_1').css('display', 'none');
+        $('#auth_form #fieldset_0').fadeIn();
+        $('#auth_toolbar #desc-auth-new').css('display', 'block');
+        $('#auth_toolbar #desc-auth-newAttributes').css('display', 'none');
     });
 
     $('#rees46_register').click(function() {
-        $('#fieldset_0').css('display', 'none');
-        $('#fieldset_1_1').fadeIn();
+        $('#auth_form #fieldset_0').css('display', 'none');
+        $('#auth_form #fieldset_1').fadeIn();
+        $('#auth_toolbar #desc-auth-new').css('display', 'none');
+        $('#auth_toolbar #desc-auth-newAttributes').css('display', 'block');
     });
 
-    $('#submitUserRegister').click(function() {
+    $('#auth_toolbar #desc-auth-newAttributes').click(function() {
         rees46UserRegister();
     });
 
-    $('#submitShopLogin').click(function() {
+    $('#auth_toolbar #desc-auth-new').click(function() {
         rees46ShopXML(true);
     });
 
@@ -63,12 +70,26 @@ $(document).ready(function() {
     });
 });
 
+function getToken() {
+	var rees46_token;
+
+	$('#help_form').attr('action').split('&').forEach(function(pair) {
+		var parts = pair.split('=');
+
+		if (parts[0] == 'token') {
+			rees46_token = parts[1];
+		}
+	});
+
+	return rees46_token;
+}
+
 function rees46UserRegister() {
     $.ajax({
-        url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
+        url: module_dir + 'rees46/ajax.php',
         data: {
             ajax: true,
-            configure: 'rees46',
+            token: getToken(),
             action: 'rees46UserRegister',
             email: $('#auth_email').val(),
             phone: $('#auth_phone').val(),
@@ -80,21 +101,20 @@ function rees46UserRegister() {
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopLogin').button('loading');
-            $('#submitUserRegister').button('loading');
+            $('#auth_toolbar #desc-auth-new').css('display', 'none');
+            $('#auth_toolbar #desc-auth-newAttributes').css('display', 'none');
         },
         success: function(json) {
             if (json['success']) {
-                showSuccessMessage(json['success']);
+                $('#content > table:first-child').after('<div class="module_confirmation conf confirm rees46">' + json['success'] + '</div>');
 
                 rees46ShopRegister();
             }
 
             if (json['error']) {
-                $('#submitShopLogin').button('reset');
-                $('#submitUserRegister').button('reset');
+                $('#auth_toolbar #desc-auth-newAttributes').css('display', 'block');
 
-                showErrorMessage(json['error']);
+                $('#content > table:first-child').after('<div class="module_error alert error rees46">' + json['error'] + '</div>');
             }
         }
     });
@@ -102,30 +122,29 @@ function rees46UserRegister() {
 
 function rees46ShopRegister() {
     $.ajax({
-        url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
+        url: module_dir + 'rees46/ajax.php',
         data: {
             ajax: true,
-            configure: 'rees46',
+            token: getToken(),
             action: 'rees46ShopRegister'
         },
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopLogin').button('loading');
-            $('#submitUserRegister').button('loading');
+            $('#auth_toolbar #desc-auth-new').css('display', 'none');
+            $('#auth_toolbar #desc-auth-newAttributes').css('display', 'none');
         },
         success: function(json) {
             if (json['success']) {
-                showSuccessMessage(json['success']);
+                $('#content > table:first-child').after('<div class="module_confirmation conf confirm rees46">' + json['success'] + '</div>');
 
                 rees46ShopXML(true);
             }
 
             if (json['error']) {
-                $('#submitShopLogin').button('reset');
-                $('#submitUserRegister').button('reset');
+                $('#auth_toolbar #desc-auth-newAttributes').css('display', 'block');
 
-                showErrorMessage(json['error']);
+                $('#content > table:first-child').after('<div class="module_error alert error rees46">' + json['error'] + '</div>');
             }
         }
     });
@@ -133,10 +152,10 @@ function rees46ShopRegister() {
 
 function rees46ShopXML(auth = false) {
     $.ajax({
-        url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
+        url: module_dir + 'rees46/ajax.php',
         data: {
             ajax: true,
-            configure: 'rees46',
+            token: getToken(),
             action: 'rees46ShopXML',
             store_key: $('#auth_store_key').val(),
             secret_key: $('#auth_secret_key').val()
@@ -144,9 +163,7 @@ function rees46ShopXML(auth = false) {
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopXML').button('loading');
-            $('#submitShopLogin').button('loading');
-            $('#submitUserRegister').button('loading');
+            $('#submitShopXML').css('display', 'none');
         },
         success: function(json) {
             if (json['success']) {
@@ -154,7 +171,7 @@ function rees46ShopXML(auth = false) {
                 $('#submitShopXML').remove();
 
                 $.map(json['success'], function(success) {
-                    showSuccessMessage(success);
+                    $('#content > table:first-child').after('<div class="module_confirmation conf confirm rees46">' + success + '</div>');
                 });
 
                 if (auth) {
@@ -163,9 +180,9 @@ function rees46ShopXML(auth = false) {
             }
 
             if (json['error']) {
-                $('#submitShopXML').button('reset');
+                $('#submitShopXML').css('display', 'block');
 
-                showErrorMessage(json['error']);
+                $('#content > table:first-child').after('<div class="module_error alert error rees46">' + json['error'] + '</div>');
             }
         }
     });
@@ -173,21 +190,21 @@ function rees46ShopXML(auth = false) {
 
 function rees46ShopOrders(next = 1, auth = false) {
     $.ajax({
-        url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
+        url: module_dir + 'rees46/ajax.php',
         data: {
             ajax: true,
-            configure: 'rees46',
+            token: getToken(),
             action: 'rees46ShopOrders',
             next: next,
         },
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopOrders').button('loading');
+            $('#submitShopOrders').css('display', 'none');
         },
         success: function(json) {
             if (json['success']) {
-                showSuccessMessage(json['success']);
+                $('#content > table:first-child').after('<div class="module_confirmation conf confirm rees46">' + json['success'] + '</div>');
             }
 
             if (json['next']) {
@@ -204,9 +221,9 @@ function rees46ShopOrders(next = 1, auth = false) {
             }
 
             if (json['error']) {
-                $('#submitShopOrders').button('reset');
+                $('#submitShopOrders').css('display', 'block');
 
-                showErrorMessage(json['error']);
+                $('#content > table:first-child').after('<div class="module_error alert error rees46">' + json['error'] + '</div>');
             }
         }
     });
@@ -214,21 +231,21 @@ function rees46ShopOrders(next = 1, auth = false) {
 
 function rees46ShopCustomers(next = 1, auth = false) {
     $.ajax({
-        url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
+        url: module_dir + 'rees46/ajax.php',
         data: {
             ajax: true,
-            configure: 'rees46',
+            token: getToken(),
             action: 'rees46ShopCustomers',
             next: next,
         },
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopCustomers').button('loading');
+            $('#submitShopCustomers').css('display', 'none');
         },
         success: function(json) {
             if (json['success']) {
-                showSuccessMessage(json['success']);
+                $('#content > table:first-child').after('<div class="module_confirmation conf confirm rees46">' + json['success'] + '</div>');
             }
 
             if (json['next']) {
@@ -245,9 +262,9 @@ function rees46ShopCustomers(next = 1, auth = false) {
             }
 
             if (json['error']) {
-                $('#submitShopCustomers').button('reset');
+                $('#submitShopCustomers').css('display', 'block');
 
-                showErrorMessage(json['error']);
+                $('#content > table:first-child').after('<div class="module_error alert error rees46">' + json['error'] + '</div>');
             }
         }
     });
@@ -255,17 +272,17 @@ function rees46ShopCustomers(next = 1, auth = false) {
 
 function rees46ShopFiles(auth = false) {
     $.ajax({
-        url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
+        url: module_dir + 'rees46/ajax.php',
         data: {
             ajax: true,
-            configure: 'rees46',
+            token: getToken(),
             action: 'rees46ShopFiles',
         },
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopFile1').button('loading');
-            $('#submitShopFile2').button('loading');
+            $('#submitShopFile1').css('display', 'none');
+            $('#submitShopFile2').css('display', 'none');
         },
         success: function(json) {
             if (json['success']) {
@@ -275,16 +292,16 @@ function rees46ShopFiles(auth = false) {
                 $('#submitShopFile2').remove();
 
                 $.map(json['success'], function(success) {
-                    showSuccessMessage(success);
+                    $('#content > table:first-child').after('<div class="module_confirmation conf confirm rees46">' + success + '</div>');
                 });
             }
 
             if (json['error']) {
-                $('#submitShopFile1').button('reset');
-                $('#submitShopFile2').button('reset');
+                $('#submitShopFile1').css('display', 'block');
+                $('#submitShopFile2').css('display', 'block');
 
                 $.map(json['error'], function(error) {
-                    showErrorMessage(error);
+                    $('#content > table:first-child').after('<div class="module_error alert error rees46">' + error + '</div>');
                 });
             }
 
@@ -303,10 +320,10 @@ function rees46ShopFiles(auth = false) {
 
 function rees46ShopFinish() {
     $.ajax({
-        url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
+        url: module_dir + 'rees46/ajax.php',
         data: {
             ajax: true,
-            configure: 'rees46',
+            token: getToken(),
             action: 'rees46ShopFinish',
         },
         type: 'post',

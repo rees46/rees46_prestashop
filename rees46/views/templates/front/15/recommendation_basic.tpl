@@ -30,7 +30,7 @@
         <div class="recommended-item">
             <div class="recommended-item-photo">
                 <a href="{$product.link|escape:'htmlall':'UTF-8'}">
-                    <img src="{$product.image}" alt="{$product.name|escape:'htmlall':'UTF-8'}" title="{$product.name|escape:'htmlall':'UTF-8'}" />
+                    <img src="{$product.image|escape:'htmlall':'UTF-8'}" alt="{$product.name|escape:'htmlall':'UTF-8'}" title="{$product.name|escape:'htmlall':'UTF-8'}" />
                 </a>
             </div>
             <div class="recommended-item-title">

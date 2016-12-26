@@ -24,7 +24,7 @@
  *}
 
 <div class="rees46 rees46-recommend">
-  <div class="recommender-block-title">{$rees46_title|escape:'htmlall':'UTF-8'}</div>
+  <div class="recommender-block-title">{$rees46_title}</div>
   <div class="recommended-items">
     {foreach from=$rees46_products item="product"}
     <div class="recommended-item">
@@ -36,7 +36,6 @@
       <div class="recommended-item-title">
         <a href="{$product.url}">{$product.name}</a>
       </div>
-
       {block name='product_price_and_shipping'}
         {if $product.show_price}
           <div class="recommended-item-price">
@@ -50,7 +49,6 @@
           </div>
         {/if}
       {/block}
-
       <div class="recommended-item-action">
         <a href="{$product.url}">{$rees46_more}</a>
       </div>

@@ -32,7 +32,7 @@ class Rees46CronModuleFrontController extends ModuleFrontController
     public $display_column_right = false;
     public $display_footer = false;
 
-    private $prev = 1;
+    private $prev = 0;
 
     public function initContent()
     {
@@ -127,7 +127,7 @@ class Rees46CronModuleFrontController extends ModuleFrontController
 
     protected function generateOffers()
     {
-        if ($this->prev == 1) {
+        if ($this->prev == 0) {
             $xml = '    <offers>' . "\n";
         } else {
             $xml = '';

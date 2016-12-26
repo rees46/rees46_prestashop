@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0
+* Compatibility with PrestaShop 1.5 - 1.7
+* Auto Registration and Authorization
+* Refactoring
+
 ## 2.1.1
 * Compatibility only with PrestaShop 1.5 - 1.6
 

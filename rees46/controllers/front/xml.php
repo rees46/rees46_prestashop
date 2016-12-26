@@ -32,6 +32,8 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
     public $display_column_right = false;
     public $display_footer = false;
 
+    private $limit = 500;
+
     public function initContent()
     {
         parent::initContent();
@@ -47,17 +49,20 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
                 } elseif (Tools::getValue('step') == 2) {
                     $this->generateCategories();
 
-                    Tools::redirect('index.php?fc=module&module=rees46&controller=xml&prev=1');
+                    $this->recorder('    <offers>' . "\n", 'a');
+
+                    Tools::redirect('index.php?fc=module&module=rees46&controller=xml&start=start');
                 }
-            } elseif (Tools::getValue('prev')) {
-                if (Tools::getValue('prev') != 'finish') {
-                    $prev = $this->generateOffers(Tools::getValue('prev'));
+            } elseif (Tools::getValue('start')) {
+                if (Tools::getValue('start') != 'finish') {
+                    if (Tools::getValue('start') == 'start') {
+                        $start = $this->generateOffers(0);
+                    } else {
+                        $start = $this->generateOffers(Tools::getValue('start'));
+                    }
 
-                    $redirect = '<meta http-equiv="refresh" content="0;';
-                    $redirect .= 'index.php?fc=module&module=rees46&controller=xml&prev=' . $prev .'">';
-
-                    die($redirect);
-                } elseif (Tools::getValue('prev') == 'finish') {
+                    Tools::redirect('index.php?fc=module&module=rees46&controller=xml&start=' . $start);
+                } elseif (Tools::getValue('start') == 'finish') {
                     $xml  = '    </offers>' . "\n";
                     $xml .= '  </shop>' . "\n";
                     $xml .= '</yml_catalog>';
@@ -145,75 +150,79 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
         }
     }
 
-    protected function generateOffers($prev)
+    protected function generateOffers($start)
     {
-        if ($prev == 1) {
-            $xml = '    <offers>' . "\n";
+        $products = $this->getProducts($this->limit, $start);
+
+        if (count($products) == $this->limit) {
+            $start = $start + $this->limit;
         } else {
-            $xml = '';
+            $start = 'finish';
         }
 
-        $id_product = $this->getIdProduct($prev);
+        if (!empty($products)) {
+            $xml = '';
 
-        if (isset($id_product)) {
-            $product = new Product(
-                (int)$id_product,
-                true,
-                (int)Configuration::get('PS_LANG_DEFAULT')
-            );
+            foreach ($products as $id_product) {
+                if (isset($id_product['id_product'])) {
+                    $product = new Product(
+                        (int)$id_product['id_product'],
+                        true,
+                        (int)Configuration::get('PS_LANG_DEFAULT')
+                    );
 
-            $xml .= '      <offer id="' . $product->id . '" ';
-            $xml .= 'available="' . ($product->quantity > 0 ? 'true' : 'false') . '">' . "\n";
-            $xml .= '        <url>'.$this->replacer($this->context->link->getProductLink($product->id)).'</url>' . "\n";
+                    $xml .= '      <offer id="' . $product->id . '" ';
+                    $xml .= 'available="' . ($product->quantity > 0 ? 'true' : 'false') . '">' . "\n";
+                    $xml .= '        <url>'.$this->replacer($this->context->link->getProductLink(
+                        $product->id
+                    )).'</url>' . "\n";
 
-            $price = $product->getPrice(!Tax::excludeTaxeOption());
-            $currency = new Currency((int)Configuration::get('REES46_XML_CURRENCY'));
-            $price *= $currency->conversion_rate;
+                    $price = $product->getPrice(!Tax::excludeTaxeOption());
+                    $currency = new Currency((int)Configuration::get('REES46_XML_CURRENCY'));
+                    $price *= $currency->conversion_rate;
 
-            $xml .= '        <price>' . number_format($price, 2, '.', '') . '</price>' . "\n";
-            $xml .= '        <currencyId>' . $currency->iso_code . '</currencyId>' . "\n";
+                    $xml .= '        <price>' . number_format($price, 2, '.', '') . '</price>' . "\n";
+                    $xml .= '        <currencyId>' . $currency->iso_code . '</currencyId>' . "\n";
 
-            $categories = $product->getCategories();
+                    $categories = $product->getCategories();
 
-            if (!empty($categories)) {
-                foreach ($categories as $category) {
-                    $xml .= '        <categoryId>' . $category . '</categoryId>' . "\n";
+                    if (!empty($categories)) {
+                        foreach ($categories as $category) {
+                            $xml .= '        <categoryId>' . $category . '</categoryId>' . "\n";
+                        }
+                    }
+
+                    $img = Product::getCover($product->id);
+
+                    if ($img['id_image']) {
+                        $image = $this->context->link->getImageLink(
+                            $product->link_rewrite[(int)Configuration::get('PS_LANG_DEFAULT')],
+                            $img['id_image'],
+                            'home_default'
+                        );
+
+                        $xml .= '        <picture>' . $image . '</picture>' . "\n";
+                    }
+
+                    $xml .= '        <name>' . $this->replacer($product->name) . '</name>' . "\n";
+
+                    if ($product->manufacturer_name) {
+                        $xml .= '        <vendor>' . $this->replacer($product->manufacturer_name) . '</vendor>' . "\n";
+                    }
+
+                    $xml .= '        <model>' . $this->replacer($product->reference) . '</model>' . "\n";
+                    $xml .= '        <description><![CDATA[' . strip_tags(
+                        htmlspecialchars_decode($product->description),
+                        '<h3>, <ul>, <li>, <p>, <br>'
+                    ) . ']]></description>' . "\n";
+                    $xml .= '      </offer>' . "\n";
                 }
             }
 
-            $img = Product::getCover($product->id);
-
-            if ($img['id_image']) {
-                $image = $this->context->link->getImageLink(
-                    $product->link_rewrite[(int)Configuration::get('PS_LANG_DEFAULT')],
-                    $img['id_image'],
-                    'home_default'
-                );
-
-                $xml .= '        <picture>' . $image . '</picture>' . "\n";
-            }
-
-            $xml .= '        <name>' . $this->replacer($product->name) . '</name>' . "\n";
-
-            if ($product->manufacturer_name) {
-                $xml .= '        <vendor>' . $this->replacer($product->manufacturer_name) . '</vendor>' . "\n";
-            }
-
-            $xml .= '        <model>' . $this->replacer($product->reference) . '</model>' . "\n";
-            $xml .= '        <description><![CDATA[' . strip_tags(
-                htmlspecialchars_decode($product->description),
-                '<h3>, <ul>, <li>, <p>, <br>'
-            ) . ']]></description>' . "\n";
-            $xml .= '      </offer>' . "\n";
-
             $this->recorder($xml, 'a');
-
-            $prev = $product->id;
-        } else {
-            $prev = 'finish';
         }
 
-        return $prev;
+        return $start;
     }
 
     protected function replacer($str)
@@ -228,32 +237,34 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
     {
         if (!$fp = fopen(_PS_DOWNLOAD_DIR_ . 'rees46.xml', $mode)) {
             if (Configuration::get('REES46_LOG_STATUS')) {
-                $this->log->write('REES46 log: Could not open xml file [ERROR]');
-                Logger::addLog('REES46: Could not open xml file', 3, null, null, null, true);
+                if (version_compare(_PS_VERSION_, '1.6', '<')) {
+                    Logger::addLog('REES46: could not open xml file', 3, null, null, null, true);
+                } else {
+                    PrestaShopLogger::addLog('REES46: could not open xml file', 3, null, null, null, true);
+                }
             }
         } elseif (fwrite($fp, $xml) === false) {
             if (Configuration::get('REES46_LOG_STATUS')) {
-                Logger::addLog('REES46: XML file not writable', 3, null, null, null, true);
+                if (version_compare(_PS_VERSION_, '1.6', '<')) {
+                    Logger::addLog('REES46: XML file not writable', 3, null, null, null, true);
+                } else {
+                    PrestaShopLogger::addLog('REES46: XML file not writable', 3, null, null, null, true);
+                }
             }
         }
 
         fclose($fp);
     }
 
-    protected function getIdProduct($prev)
+    protected function getProducts($limit, $start)
     {
         $query = new DbQuery();
         $query->select('p.`id_product`');
         $query->from('product', 'p');
-        $query->where('p.`id_product` > ' . (int)$prev);
         $query->where('p.`active` = 1');
         $query->orderBy('p.`id_product` ASC');
-        $query->limit(1);
+        $query->limit((int)$limit, (int)$start);
 
-        $result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($query->build());
-
-        if (isset($result[0])) {
-            return $result[0]['id_product'];
-        }
+        return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($query->build());
     }
 }
