@@ -84,7 +84,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.0.0';
+        $this->version = '3.0.1';
         $this->author = 'rees46.com';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -463,6 +463,11 @@ class Rees46 extends Module
     public function hookDisplayRightColumn($params)
     {
         return $this->getModules('displayRightColumn');
+    }
+
+    public function hookDisplayFooterProduct($params)
+    {
+        return $this->getModules('displayFooterProduct');
     }
 
     public function hookDisplayRightColumnProduct($params)

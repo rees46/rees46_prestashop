@@ -24,15 +24,17 @@
  *}
 
 {foreach from=$rees46_modules item=module}
+{if $module.params}
 <script type="text/javascript">
 {if {$rees46_css}}
 r46('add_css', 'recommendations');
 {/if}
 r46('recommend', '{$module.type}', {$module.params|json_encode nofilter}, function(results) {
   if (results.length > 0) {
-    $('#rees46-recommended-{$module.id_module}').load('{$module.link}?fc=module&ajax=1&module_id={$module.id_module}&product_ids=' + results);
+    $('#rees46-recommended-{$module.id_module}').load('{$module.link nofilter}&fc=module&ajax=1&module_id={$module.id_module}&product_ids=' + results);
   }
 });
 </script>
 <div id="rees46-recommended-{$module.id_module}" class="clearfix"></div>
+{/if}
 {/foreach}

@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.1
+* Fixes
+
 ## 3.0.0
 * Compatibility with PrestaShop 1.5 - 1.7
 * Auto Registration and Authorization
