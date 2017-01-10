@@ -166,8 +166,7 @@ class Rees46CronModuleFrontController extends ModuleFrontController
             if ($img['id_image']) {
                 $image = $this->context->link->getImageLink(
                     $product->link_rewrite[(int)Configuration::get('PS_LANG_DEFAULT')],
-                    $img['id_image'],
-                    'home_default'
+                    $img['id_image']
                 );
 
                 $xml .= '        <picture>' . $image . '</picture>' . "\n";

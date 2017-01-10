@@ -84,7 +84,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.0.1';
+        $this->version = '3.0.2';
         $this->author = 'rees46.com';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -266,8 +266,7 @@ class Rees46 extends Module
 
                 $image = $this->context->link->getImageLink(
                     $product->link_rewrite[$this->context->language->id],
-                    $img['id_image'],
-                    'home_default'
+                    $img['id_image']
                 );
 
                 $js .= 'r46(\'track\', \'view\', {';
@@ -636,13 +635,9 @@ class Rees46 extends Module
                         }
                     }
 
-                    $modules[$key]['link'] = $this->context->link->getModuleLink(
-                        'rees46',
-                        'recommendation',
-                        array(),
-                        null,
-                        (int)$this->context->language->id,
-                        (int)$this->context->shop->id
+                    $modules[$key]['link'] = $this->context->link->getPageLink(
+                        'index',
+                        true
                     );
                 }
 
@@ -1616,7 +1611,7 @@ class Rees46 extends Module
             $module_values['type'] = 'interesting';
             $module_values['limit'] = '';
             $module_values['template'] = 'default';
-            $module_values['image_type'] = 'home_default';
+            $module_values['image_type'] = '';
             $module_values['discount'] = 0;
             $module_values['manufacturers'] = array();
             $module_values['manufacturers_exclude'] = array();

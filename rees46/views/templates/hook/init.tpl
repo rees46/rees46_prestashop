@@ -31,7 +31,7 @@ r46('add_css', 'recommendations');
 {/if}
 r46('recommend', '{$module.type}', {$module.params|json_encode nofilter}, function(results) {
   if (results.length > 0) {
-    $('#rees46-recommended-{$module.id_module}').load('{$module.link nofilter}&fc=module&ajax=1&module_id={$module.id_module}&product_ids=' + results);
+    $('#rees46-recommended-{$module.id_module}').load('{$module.link}?fc=module&module=rees46&controller=recommendation&ajax=1&module_id={$module.id_module}&product_ids=' + results);
   }
 });
 </script>

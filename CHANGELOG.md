@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.2
+* Validation fixes
+
 ## 3.0.1
 * Fixes
 
