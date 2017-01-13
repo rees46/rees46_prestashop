@@ -1228,9 +1228,9 @@ class Rees46 extends Module
                 'icon' => 'icon-comments',
             ),
             'description' => $this->l('Go to your')
-                . ' <a href="https://rees46.com/customers/sign_in" target="_blank">'
+                . ' <a href="https://rees46.com/customers/sign_in" target="_blank" class="button btn btn-primary">'
                 . $this->l('REES46 store dashboard')
-                . ' <i class="icon-external-link"></i></a> '
+                . ' </a> '
                 . $this->l('to get the access to:')
                 . '<br><ul>'
                 . '<li>' . $this->l('Triggered emails') . '</li>'
