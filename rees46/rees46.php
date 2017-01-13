@@ -84,7 +84,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.0.2';
+        $this->version = '3.0.3';
         $this->author = 'rees46.com';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -699,8 +699,7 @@ class Rees46 extends Module
             curl_exec($ch);
             curl_close($ch);
 
-            $output .= $this->displayPromo()
-                . $this->displayAuth()
+            $output .= $this->displayAuth()
                 . $this->renderFormAuth()
                 . $this->renderFormHelp();
         } elseif (Tools::isSubmit('submit' . $this->name)) {
@@ -716,11 +715,10 @@ class Rees46 extends Module
 
             $output .= $this->displayConfirmation($this->l('The settings have been successfully updated.'));
 
-            $output .= $this->displayPromo()
+            $output .= $this->renderFormHelp()
                 . $this->renderFormGeneral()
                 . $this->renderListBlocks()
-                . $this->displayActions()
-                . $this->renderFormHelp();
+                . $this->displayActions();
         } elseif (Tools::isSubmit('submit_module')) { // save module
             Configuration::updateValue('REES46_MODULE_' . Tools::getValue('id_module'), Tools::jsonEncode(
                 $this->getModuleValues()
@@ -728,11 +726,10 @@ class Rees46 extends Module
 
             $output .= $this->displayConfirmation($this->l('The settings have been successfully updated.'));
 
-            $output .= $this->displayPromo()
+            $output .= $this->renderFormHelp()
                 . $this->renderFormGeneral()
                 . $this->renderListBlocks()
-                . $this->displayActions()
-                . $this->renderFormHelp();
+                . $this->displayActions();
         } elseif (Tools::isSubmit('deleteblocks')
             && Tools::isSubmit('id_module')
             && Configuration::get('REES46_MODULE_' . Tools::getValue('id_module'))
@@ -741,22 +738,20 @@ class Rees46 extends Module
 
             $output .= $this->displayConfirmation($this->l('The settings have been successfully updated.'));
 
-            $output .= $this->displayPromo()
+            $output .= $this->renderFormHelp()
                 . $this->renderFormGeneral()
                 . $this->renderListBlocks()
-                . $this->displayActions()
-                . $this->renderFormHelp();
+                . $this->displayActions();
         } elseif (Tools::isSubmit('new_module')
             || (Tools::isSubmit('id_module')
             && Configuration::get('REES46_MODULE_' . Tools::getValue('id_module')))
         ) { // view module
             $output .= $this->renderFormModule();
         } else {
-            $output .= $this->displayPromo()
+            $output .= $this->renderFormHelp()
                 . $this->renderFormGeneral()
                 . $this->renderListBlocks()
-                . $this->displayActions()
-                . $this->renderFormHelp();
+                . $this->displayActions();
         }
 
         return $output;
@@ -1175,7 +1170,7 @@ class Rees46 extends Module
         $helper->listTotal = count($content);
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->table = 'blocks';
-        $helper->title = '<i class="icon-puzzle-piece"></i> ' . $this->l('Recommendations');
+        $helper->title = '<i class="icon-puzzle-piece"></i> ' . $this->l('Product Recommendations Blocks');
         $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->name;
         $helper->identifier = $this->identifier;
         $helper->actions = array('edit', 'delete',);
@@ -1232,7 +1227,21 @@ class Rees46 extends Module
                 'title' => $this->l('Help'),
                 'icon' => 'icon-comments',
             ),
-            'description' => $this->l('Documentation:')
+            'description' => $this->l('Go to your')
+                . ' <a href="https://rees46.com/customers/sign_in" target="_blank">'
+                . $this->l('REES46 store dashboard')
+                . ' <i class="icon-external-link"></i></a> '
+                . $this->l('to get the access to:')
+                . '<br><ul>'
+                . '<li>' . $this->l('Triggered emails') . '</li>'
+                . '<li>' . $this->l('Email marketing tool') . '</li>'
+                . '<li>' . $this->l('Personalized search') . '</li>'
+                . '<li>' . $this->l('Web push triggered notifications') . '</li>'
+                . '<li>' . $this->l('Instant web push notifications') . '</li>'
+                . '<li>' . $this->l('Audience segmentation') . '</li>'
+                . '<li>' . $this->l('Abandoned cart remarketing tool') . '</li>'
+                . '</ul><br>'
+                . $this->l('Documentation:')
                 . ' <a href="'
                 . $this->l('http://docs.rees46.com/display/en/PrestaShop+Module')
                 . '" target="_blank">'
@@ -1288,7 +1297,7 @@ class Rees46 extends Module
 
         $fields_form[0]['form'] = array(
             'legend' => array(
-                'title' => $this->l('Recommendation block'),
+                'title' => $this->l('Product Recommendations Block'),
                 'icon' => 'icon-puzzle-piece',
             ),
             'input' => array(
@@ -1626,19 +1635,6 @@ class Rees46 extends Module
         }
 
         return $module_values;
-    }
-
-    protected function displayPromo()
-    {
-        $language = new Language((int)$this->context->language->id);
-
-        $this->context->smarty->assign(
-            array(
-                'rees46_lang' => $language->iso_code,
-            )
-        );
-
-        //return $this->display(__FILE__, 'views/templates/admin/promo.tpl');
     }
 
     protected function displayAuth()

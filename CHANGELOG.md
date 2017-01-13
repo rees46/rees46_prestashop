@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.3
+* Added service description
+* Remove promo block
+
 ## 3.0.2
 * Validation fixes
 
