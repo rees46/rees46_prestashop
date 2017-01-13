@@ -1227,11 +1227,7 @@ class Rees46 extends Module
                 'title' => $this->l('Help'),
                 'icon' => 'icon-comments',
             ),
-            'description' => $this->l('Go to your')
-                . ' <a href="https://rees46.com/customers/sign_in" target="_blank" class="button btn btn-primary">'
-                . $this->l('REES46 store dashboard')
-                . ' </a> '
-                . $this->l('to get the access to:')
+            'description' => $this->l('Go to your REES46 store dashboard to get the access to:')
                 . '<br><ul>'
                 . '<li>' . $this->l('Triggered emails') . '</li>'
                 . '<li>' . $this->l('Email marketing tool') . '</li>'
@@ -1241,6 +1237,9 @@ class Rees46 extends Module
                 . '<li>' . $this->l('Audience segmentation') . '</li>'
                 . '<li>' . $this->l('Abandoned cart remarketing tool') . '</li>'
                 . '</ul><br>'
+                . '<a href="https://rees46.com/customers/sign_in" target="_blank" class="button btn btn-primary">'
+                . $this->l('REES46 dashboard')
+                . '</a><br><br>'
                 . $this->l('Documentation:')
                 . ' <a href="'
                 . $this->l('http://docs.rees46.com/display/en/PrestaShop+Module')
