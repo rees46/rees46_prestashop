@@ -35,6 +35,7 @@
     </div>
 </div>
 <form class="form">
+    <input type="hidden" value="{$rees46_secure_key|escape:'htmlall':'UTF-8'}" id="rees46_secure_key">
     <table class="table_grid" name="list_table">
         <tr>
             <td>
@@ -62,7 +63,7 @@
                                     {/if}
                                 </td>
                                 <td class="pointer text-right">
-                                    {if !$value.status}
+                                    {if $value.status}
                                         <a id="{$value.id|escape:'htmlall':'UTF-8'}" class="button btn btn-default pull-right"><i class="icon-refresh"></i> {$rees46_lang_repeat|escape:'htmlall':'UTF-8'}</a>
                                     {/if}
                                 </td>

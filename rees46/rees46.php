@@ -84,7 +84,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.0.3';
+        $this->version = '3.0.4';
         $this->author = 'rees46.com';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -307,8 +307,8 @@ class Rees46 extends Module
             && Configuration::get('REES46_SECRET_KEY') != ''
         ) {
             $js = '';
-            $product_id = Tools::getValue('id_product');
-            $quantity = Tools::getValue('qty');
+            $product_id = (int)Tools::getValue('id_product');
+            $quantity = (int)Tools::getValue('qty');
             $add = Tools::getValue('add');
             $delete = Tools::getValue('delete');
             $op = Tools::getValue('op');
@@ -1693,6 +1693,7 @@ class Rees46 extends Module
                 'rees46_lang_status' => $this->l('Status'),
                 'rees46_lang_repeat' => $this->l('Repeat'),
                 'rees46_list_values' => $list_values,
+                'rees46_secure_key' => Tools::encrypt(Configuration::get('REES46_XML_CRON') . _PS_VERSION_),
             )
         );
 

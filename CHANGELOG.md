@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.4
+* Security fixes
+
 ## 3.0.3
 * Added service description
 * Remove promo block

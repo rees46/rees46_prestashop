@@ -24,8 +24,8 @@
  */
 
 $(document).ready(function() {
-	$('#auth_toolbar #desc-auth-new').css('display', 'none');
-	$('#auth_toolbar #desc-auth-newAttributes').css('display', 'none');
+    $('#auth_toolbar #desc-auth-new').css('display', 'none');
+    $('#auth_toolbar #desc-auth-newAttributes').css('display', 'none');
 
     $('#rees46_login').click(function() {
         $('#auth_form #fieldset_1').css('display', 'none');
@@ -71,17 +71,9 @@ $(document).ready(function() {
 });
 
 function getToken() {
-	var rees46_token;
+    var rees46_token = $('#rees46_secure_key').val();
 
-	$('#help_form').attr('action').split('&').forEach(function(pair) {
-		var parts = pair.split('=');
-
-		if (parts[0] == 'token') {
-			rees46_token = parts[1];
-		}
-	});
-
-	return rees46_token;
+    return rees46_token;
 }
 
 function rees46UserRegister() {
