@@ -30,8 +30,7 @@ include_once('rees46.php');
 
 if (Tools::getValue('ajax') == 'true'
     && Tools::getValue('token')
-    && Tools::encrypt(Configuration::get('REES46_XML_CRON') . _PS_VERSION_)
-    == Tools::getValue('token')
+    && Tools::encrypt(Configuration::get('REES46_XML_CRON') . _PS_VERSION_) == Tools::getValue('token')
     && Tools::getValue('action')
 ) {
     $rees46 = new Rees46();
