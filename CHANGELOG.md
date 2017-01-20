@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.5
+* Changes module name and author
+
 ## 3.0.4
 * Security fixes
 

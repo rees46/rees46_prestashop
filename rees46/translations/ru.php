@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{rees46}prestashop>rees46_1fe896c9366fdf6f863bf898642d2a9b'] = 'REES46';
+$_MODULE['<{rees46}prestashop>rees46_30806d647f23cff6324599bd21274641'] = 'REES46 eCommerce Marketing Suite for PrestaShop';
 $_MODULE['<{rees46}prestashop>rees46_c5589a74f5280bf36e8b8716bd4c4007'] = 'Центр управления конверсией онлайн-магазина. Все, что нужно маркетологу — на одном экране.';
 $_MODULE['<{rees46}prestashop>rees46_876f23178c29dc2552c0b48bf23cd9bd'] = 'Вы уверены, что хотите удалить?';
 $_MODULE['<{rees46}prestashop>rees46_6483df61619946ebf2427ba360df7ce5'] = 'Настройки успешно обновлены.';

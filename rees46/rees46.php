@@ -84,8 +84,8 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.0.4';
-        $this->author = 'rees46.com';
+        $this->version = '3.0.5';
+        $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
         $this->display = 'view';
@@ -97,7 +97,7 @@ class Rees46 extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('REES46');
+        $this->displayName = $this->l('REES46 eCommerce Marketing Suite for PrestaShop');
         $this->description = $this->l('The ultimate plug-n-play marketing suite for your online store growth.');
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
