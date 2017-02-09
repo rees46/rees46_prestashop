@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.6
+* Autoselect countries from store settings in registration form
+* Removal Afghanistan from registration form
+* Added country field to trackcms
+
 ## 3.0.5
 * Changes module name and author
 

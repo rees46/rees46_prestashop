@@ -688,6 +688,10 @@ class Rees46 extends Module
                 $params['city'] = Configuration::get('PS_SHOP_CITY');
             }
 
+            if (Configuration::get('PS_SHOP_COUNTRY') != '') {
+                $params['country'] = Configuration::get('PS_SHOP_COUNTRY');
+            }
+
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_HEADER, false);
@@ -793,6 +797,10 @@ class Rees46 extends Module
             ),
         );
 
+        $countries = Country::getCountries($this->context->language->id);
+
+        unset($countries['231']);
+
         $fields_form[1]['form'] = array(
             'legend' => array(
                 'title' => $this->l('Registration Form'),
@@ -830,7 +838,7 @@ class Rees46 extends Module
                     'label' => $this->l('Country'),
                     'name' => 'auth_country_code',
                     'options' => array(
-                        'query' => Country::getCountries($this->context->language->id),
+                        'query' => $countries,
                         'id' => 'iso_code',
                         'name' => 'name',
                     ),
@@ -880,7 +888,7 @@ class Rees46 extends Module
                 'auth_phone' => Configuration::get('PS_SHOP_PHONE'),
                 'auth_first_name' => $this->context->employee->firstname,
                 'auth_last_name' => $this->context->employee->lastname,
-                'auth_country_code' => '',
+                'auth_country_code' => Country::getIsoById(Configuration::get('PS_SHOP_COUNTRY_ID')),
                 'auth_category' => '',
             ),
             'languages' => $this->context->controller->getLanguages(),
