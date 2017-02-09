@@ -84,7 +84,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.0.5';
+        $this->version = '3.0.6';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
