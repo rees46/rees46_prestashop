@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.1.0
+* Fixed status of synchronized orders
+* Fixed repeated lead tracking
+* Unavailable products exclude from the feed
+* Added dashboard button (API)
+* Added recommender Supply
+* Updated translations
+* New logo
+
 ## 3.0.6
 * Autoselect countries from store settings in registration form
 * Removal Afghanistan from registration form

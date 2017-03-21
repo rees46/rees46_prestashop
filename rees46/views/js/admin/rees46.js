@@ -61,6 +61,10 @@ $(document).ready(function() {
     $('#submitShopFile2').click(function() {
         rees46ShopFiles();
     });
+
+    $('#submitDashboard').click(function() {
+        rees46Dashboard();
+    });
 });
 
 function rees46UserRegister() {
@@ -322,6 +326,34 @@ function rees46ShopFinish() {
                 setTimeout(function() {
                     location.reload();
                 }, 2000);
+            }
+        }
+    });
+}
+
+function rees46Dashboard() {
+    $.ajax({
+        url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
+        data: {
+            ajax: true,
+            configure: 'rees46',
+            action: 'rees46Dashboard',
+        },
+        type: 'post',
+        dataType: 'json',
+        success: function(json) {
+            $('#formDashboard').remove();
+
+            if (json['form']) {
+                $('body').append(json['form']);
+
+                setTimeout(function() {
+                    $('#formDashboard').submit();
+                }, 500);
+            }
+
+            if (json['url']) {
+                window.open(json['url']);
             }
         }
     });

@@ -171,50 +171,52 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
                         (int)Configuration::get('PS_LANG_DEFAULT')
                     );
 
-                    $xml .= '      <offer id="' . $product->id . '" ';
-                    $xml .= 'available="' . ($product->quantity > 0 ? 'true' : 'false') . '">' . "\n";
-                    $xml .= '        <url>'.$this->replacer($this->context->link->getProductLink(
-                        $product->id
-                    )).'</url>' . "\n";
+                    if ($product->quantity > 0) {
+                        $xml .= '      <offer id="' . $product->id . '" ';
+                        $xml .= 'available="true">' . "\n";
+                        $xml .= '        <url>'.$this->replacer($this->context->link->getProductLink(
+                            $product->id
+                        )).'</url>' . "\n";
 
-                    $price = $product->getPrice(!Tax::excludeTaxeOption());
-                    $currency = new Currency((int)Configuration::get('REES46_XML_CURRENCY'));
-                    $price *= $currency->conversion_rate;
+                        $price = $product->getPrice(!Tax::excludeTaxeOption());
+                        $currency = new Currency((int)Configuration::get('REES46_XML_CURRENCY'));
+                        $price *= $currency->conversion_rate;
 
-                    $xml .= '        <price>' . number_format($price, 2, '.', '') . '</price>' . "\n";
-                    $xml .= '        <currencyId>' . $currency->iso_code . '</currencyId>' . "\n";
+                        $xml .= '        <price>' . number_format($price, 2, '.', '') . '</price>' . "\n";
+                        $xml .= '        <currencyId>' . $currency->iso_code . '</currencyId>' . "\n";
 
-                    $categories = $product->getCategories();
+                        $categories = $product->getCategories();
 
-                    if (!empty($categories)) {
-                        foreach ($categories as $category) {
-                            $xml .= '        <categoryId>' . $category . '</categoryId>' . "\n";
+                        if (!empty($categories)) {
+                            foreach ($categories as $category) {
+                                $xml .= '        <categoryId>' . $category . '</categoryId>' . "\n";
+                            }
                         }
+
+                        $img = Product::getCover($product->id);
+
+                        if ($img['id_image']) {
+                            $image = $this->context->link->getImageLink(
+                                $product->link_rewrite[(int)Configuration::get('PS_LANG_DEFAULT')],
+                                $img['id_image']
+                            );
+
+                            $xml .= '        <picture>' . $image . '</picture>' . "\n";
+                        }
+
+                        $xml .= '        <name>' . $this->replacer($product->name) . '</name>' . "\n";
+
+                        if ($product->manufacturer_name) {
+                            $xml .= '        <vendor>' . $this->replacer($product->manufacturer_name) . '</vendor>' . "\n";
+                        }
+
+                        $xml .= '        <model>' . $this->replacer($product->reference) . '</model>' . "\n";
+                        $xml .= '        <description><![CDATA[' . strip_tags(
+                            htmlspecialchars_decode($product->description),
+                            '<h3>, <ul>, <li>, <p>, <br>'
+                        ) . ']]></description>' . "\n";
+                        $xml .= '      </offer>' . "\n";
                     }
-
-                    $img = Product::getCover($product->id);
-
-                    if ($img['id_image']) {
-                        $image = $this->context->link->getImageLink(
-                            $product->link_rewrite[(int)Configuration::get('PS_LANG_DEFAULT')],
-                            $img['id_image']
-                        );
-
-                        $xml .= '        <picture>' . $image . '</picture>' . "\n";
-                    }
-
-                    $xml .= '        <name>' . $this->replacer($product->name) . '</name>' . "\n";
-
-                    if ($product->manufacturer_name) {
-                        $xml .= '        <vendor>' . $this->replacer($product->manufacturer_name) . '</vendor>' . "\n";
-                    }
-
-                    $xml .= '        <model>' . $this->replacer($product->reference) . '</model>' . "\n";
-                    $xml .= '        <description><![CDATA[' . strip_tags(
-                        htmlspecialchars_decode($product->description),
-                        '<h3>, <ul>, <li>, <p>, <br>'
-                    ) . ']]></description>' . "\n";
-                    $xml .= '      </offer>' . "\n";
                 }
             }
 
