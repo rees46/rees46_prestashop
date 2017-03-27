@@ -86,7 +86,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.1.0';
+        $this->version = '3.1.1';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -1781,6 +1781,8 @@ class Rees46 extends Module
 
             $params = array(
                 'website' => _PS_BASE_URL_ . __PS_BASE_URI__,
+                'cms_version' => _PS_VERSION_,
+                'module_version' => $this->version,
                 'email' => Configuration::get('PS_SHOP_EMAIL'),
                 'first_name' => $this->context->employee->firstname,
                 'last_name' => $this->context->employee->lastname,

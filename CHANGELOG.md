@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.1
+* Added module version and cms version to lead tracking
+
 ## 3.1.0
 * Fixed status of synchronized orders
 * Fixed repeated lead tracking
