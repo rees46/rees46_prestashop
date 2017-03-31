@@ -116,3 +116,5 @@ $_MODULE['<{rees46}prestashop>rees46_9869004181cde81248e3d6dac31227d4'] = '%s cu
 $_MODULE['<{rees46}prestashop>rees46_a2cbd2e007f89e15da3ff2bfd0286338'] = 'No available customers for export.';
 $_MODULE['<{rees46}prestashop>rees46_7d82e96528c71310ed832f47b7e847ea'] = '%s successfully loaded.';
 $_MODULE['<{rees46}prestashop>rees46_d7e99da716a7543c431bdf368cf54ae5'] = 'Could not load %s.';
+$_MODULE['<{rees46}prestashop>recommendation_d3da97e2d9aee5c8fbe03156ad051c99'] = 'More';
+$_MODULE['<{rees46}prestashop>recommendation_c91e4ee170226d66e90f99ba917e4c20'] = 'Quick view';

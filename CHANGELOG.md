@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.0
+* Fixed front localisations
+* Added localisations: french, german, finnish, spanish, italian, portuguese, swedish
+
 ## 3.1.1
 * Added module version and cms version to lead tracking
 
