@@ -128,7 +128,11 @@ function rees46ShopRegister() {
     });
 }
 
-function rees46ShopXML(auth = false) {
+function rees46ShopXML(auth) {
+    if (!auth) {
+        auth = false;
+    }
+
     $.ajax({
         url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
         data: {
@@ -166,7 +170,15 @@ function rees46ShopXML(auth = false) {
     });
 }
 
-function rees46ShopOrders(next = 1, auth = false) {
+function rees46ShopOrders(next, auth) {
+    if (!next) {
+        next = 1;
+    }
+
+    if (!auth) {
+        auth = false;
+    }
+
     $.ajax({
         url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
         data: {
@@ -207,7 +219,15 @@ function rees46ShopOrders(next = 1, auth = false) {
     });
 }
 
-function rees46ShopCustomers(next = 1, auth = false) {
+function rees46ShopCustomers(next, auth) {
+    if (!next) {
+        next = 1;
+    }
+
+    if (!auth) {
+        auth = false;
+    }
+
     $.ajax({
         url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
         data: {
@@ -248,7 +268,11 @@ function rees46ShopCustomers(next = 1, auth = false) {
     });
 }
 
-function rees46ShopFiles(auth = false) {
+function rees46ShopFiles(auth) {
+    if (!auth) {
+        auth = false;
+    }
+
     $.ajax({
         url: 'index.php?controller=AdminModules&configure=rees46&module_name=rees46&token=' + token,
         data: {

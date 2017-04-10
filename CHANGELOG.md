@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.1
+* Fixed admin script for IE
+
 ## 3.3.0
 * Fixed admin script for versions 1.6.0.x
 * Fixed admin buttons on error
