@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.0
+* Fixed admin script for versions 1.6.0.x
+* Fixed admin buttons on error
+
 ## 3.2.0
 * Fixed front localisations
 * Added localisations: french, german, finnish, spanish, italian, portuguese, swedish

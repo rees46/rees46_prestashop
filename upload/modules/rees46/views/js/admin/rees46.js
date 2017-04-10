@@ -25,13 +25,13 @@
 
 $(document).ready(function() {
     $('#rees46_login').click(function() {
-        $('#fieldset_1_1').css('display', 'none');
-        $('#fieldset_0').fadeIn();
+        $('#auth_form #fieldset_1_1, #auth_form #fieldset_1').css('display', 'none');
+        $('#auth_form #fieldset_0').fadeIn();
     });
 
     $('#rees46_register').click(function() {
-        $('#fieldset_0').css('display', 'none');
-        $('#fieldset_1_1').fadeIn();
+        $('#auth_form #fieldset_0').css('display', 'none');
+        $('#auth_form #fieldset_1_1, #auth_form #fieldset_1').fadeIn();
     });
 
     $('#submitUserRegister').click(function() {
@@ -84,8 +84,7 @@ function rees46UserRegister() {
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopLogin').button('loading');
-            $('#submitUserRegister').button('loading');
+            $('#submitShopLogin, #submitUserRegister').prop('disabled', true);
         },
         success: function(json) {
             if (json['success']) {
@@ -95,8 +94,7 @@ function rees46UserRegister() {
             }
 
             if (json['error']) {
-                $('#submitShopLogin').button('reset');
-                $('#submitUserRegister').button('reset');
+                $('#submitShopLogin, #submitUserRegister').prop('disabled', false);
 
                 showErrorMessage(json['error']);
             }
@@ -114,10 +112,6 @@ function rees46ShopRegister() {
         },
         type: 'post',
         dataType: 'json',
-        beforeSend: function() {
-            $('#submitShopLogin').button('loading');
-            $('#submitUserRegister').button('loading');
-        },
         success: function(json) {
             if (json['success']) {
                 showSuccessMessage(json['success']);
@@ -126,8 +120,7 @@ function rees46ShopRegister() {
             }
 
             if (json['error']) {
-                $('#submitShopLogin').button('reset');
-                $('#submitUserRegister').button('reset');
+                $('#submitShopLogin, #submitUserRegister').prop('disabled', false);
 
                 showErrorMessage(json['error']);
             }
@@ -148,9 +141,7 @@ function rees46ShopXML(auth = false) {
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopXML').button('loading');
-            $('#submitShopLogin').button('loading');
-            $('#submitUserRegister').button('loading');
+            $('#submitShopXML, #submitShopLogin, #submitUserRegister').prop('disabled', true);
         },
         success: function(json) {
             if (json['success']) {
@@ -167,7 +158,7 @@ function rees46ShopXML(auth = false) {
             }
 
             if (json['error']) {
-                $('#submitShopXML').button('reset');
+                $('#submitShopXML, #submitShopLogin, #submitUserRegister').prop('disabled', false);
 
                 showErrorMessage(json['error']);
             }
@@ -187,7 +178,7 @@ function rees46ShopOrders(next = 1, auth = false) {
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopOrders').button('loading');
+            $('#submitShopOrders').prop('disabled', true);
         },
         success: function(json) {
             if (json['success']) {
@@ -208,7 +199,7 @@ function rees46ShopOrders(next = 1, auth = false) {
             }
 
             if (json['error']) {
-                $('#submitShopOrders').button('reset');
+                $('#submitShopOrders').prop('disabled', false);
 
                 showErrorMessage(json['error']);
             }
@@ -228,7 +219,7 @@ function rees46ShopCustomers(next = 1, auth = false) {
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopCustomers').button('loading');
+            $('#submitShopCustomers').prop('disabled', true);
         },
         success: function(json) {
             if (json['success']) {
@@ -249,7 +240,7 @@ function rees46ShopCustomers(next = 1, auth = false) {
             }
 
             if (json['error']) {
-                $('#submitShopCustomers').button('reset');
+                $('#submitShopCustomers').prop('disabled', false);
 
                 showErrorMessage(json['error']);
             }
@@ -268,8 +259,8 @@ function rees46ShopFiles(auth = false) {
         type: 'post',
         dataType: 'json',
         beforeSend: function() {
-            $('#submitShopFile1').button('loading');
-            $('#submitShopFile2').button('loading');
+            $('#submitShopFile1').prop('disabled', true);
+            $('#submitShopFile2').prop('disabled', true);
         },
         success: function(json) {
             if (json['success']) {
@@ -284,8 +275,8 @@ function rees46ShopFiles(auth = false) {
             }
 
             if (json['error']) {
-                $('#submitShopFile1').button('reset');
-                $('#submitShopFile2').button('reset');
+                $('#submitShopFile1').prop('disabled', false);
+                $('#submitShopFile2').prop('disabled', false);
 
                 $.map(json['error'], function(error) {
                     showErrorMessage(error);

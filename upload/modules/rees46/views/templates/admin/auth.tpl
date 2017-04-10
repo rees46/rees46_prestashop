@@ -24,7 +24,7 @@
  *}
 
 <style>
-#fieldset_0, #fieldset_1_1 {
+#auth_form #fieldset_0, #auth_form #fieldset_1_1, #auth_form #fieldset_1 {
   display: none;
 }
 </style>
