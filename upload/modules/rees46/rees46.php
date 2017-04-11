@@ -86,7 +86,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.3.1';
+        $this->version = '3.3.2';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -528,6 +528,8 @@ class Rees46 extends Module
                 $search_query = Tools::getValue('search_query');
             }
 
+            $css = false;
+
             $modules = array();
 
             for ($id_module = 1; $id_module <= Configuration::get('REES46_MODULE_ID'); $id_module++) {
@@ -535,8 +537,6 @@ class Rees46 extends Module
 
                 if ($settings['hook'] == $hook && $settings['status']) {
                     $modules[] = $settings;
-
-                    $css = false;
 
                     if ($settings['template'] == 'basic') {
                         $css = true;

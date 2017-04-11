@@ -209,8 +209,8 @@ class Rees46RecommendationModuleFrontController extends ModuleFrontController
                         array(
                             'rees46_module_id' => $module_id,
                             'rees46_title' => $title,
-                            'rees46_more' => $this->module->l('More'),
-                            'rees46_quick' => $this->module->l('Quick view'),
+                            'rees46_more' => $this->module->l('More', 'recommendation'),
+                            'rees46_quick' => $this->module->l('Quick view', 'recommendation'),
                             'rees46_products' => $products,
                             'rees46_template' => $module_values['template'],
                         )

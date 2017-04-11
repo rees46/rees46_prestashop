@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.2
+* Fixed bug with css include
+* Fixed front translation bug
+
 ## 3.3.1
 * Fixed admin script for IE
 
