@@ -86,7 +86,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.3.2';
+        $this->version = '3.3.3';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -798,6 +798,8 @@ class Rees46 extends Module
 
         unset($countries['231']);
 
+        $currencies = Currency::getCurrenciesByIdShop((int)Tools::getValue('id_shop'));
+
         $fields_form[1]['form'] = array(
             'legend' => array(
                 'title' => $this->l('Registration Form'),
@@ -836,6 +838,17 @@ class Rees46 extends Module
                     'name' => 'auth_country_code',
                     'options' => array(
                         'query' => $countries,
+                        'id' => 'iso_code',
+                        'name' => 'name',
+                    ),
+                    'required' => true,
+                ),
+                array(
+                    'type' => 'select',
+                    'label' => $this->l('Currency'),
+                    'name' => 'auth_currency_code',
+                    'options' => array(
+                        'query' => $currencies,
                         'id' => 'iso_code',
                         'name' => 'name',
                     ),
@@ -886,6 +899,7 @@ class Rees46 extends Module
                 'auth_first_name' => $this->context->employee->firstname,
                 'auth_last_name' => $this->context->employee->lastname,
                 'auth_country_code' => Country::getIsoById(Configuration::get('PS_SHOP_COUNTRY_ID')),
+                'auth_currency_code' => Currency::getDefaultCurrency()->iso_code,
                 'auth_category' => '',
             ),
             'languages' => $this->context->controller->getLanguages(),
@@ -1839,6 +1853,10 @@ class Rees46 extends Module
             $json['error'] = $this->l('Incorrect value for Country field.');
         }
 
+        if (!Validate::isName(Tools::getValue('currency_code')) || Tools::getValue('currency_code') == '') {
+            $json['error'] = $this->l('Incorrect value for Currency field.');
+        }
+
         if (!Validate::isInt(Tools::getValue('category')) || Tools::getValue('category') == '') {
             $json['error'] = $this->l('Incorrect value for Product Category field.');
         }
@@ -1854,6 +1872,7 @@ class Rees46 extends Module
         $curl_data['first_name'] = Tools::getValue('first_name');
         $curl_data['last_name'] = Tools::getValue('last_name');
         $curl_data['country_code'] = Tools::getValue('country_code');
+        $curl_data['currency_code'] = Tools::getValue('currency_code');
 
         $return = $this->curl('POST', 'https://rees46.com/api/customers', Tools::jsonEncode($curl_data));
 

@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.3
+* Added currency field to registration form
+
 ## 3.3.2
 * Fixed bug with css include
 * Fixed front translation bug
