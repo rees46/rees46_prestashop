@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.4.0
+* Fixed bug in xml (500 error)
+* Replaced email in files
+
 ## 3.3.3
 * Added currency field to registration form
 

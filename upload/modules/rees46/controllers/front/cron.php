@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    p0v1n0m <ay@rees46.com>
+ *  @author    p0v1n0m <support@rees46.com>
  *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
@@ -31,6 +31,7 @@ class Rees46CronModuleFrontController extends ModuleFrontController
     public $display_column_left = false;
     public $display_column_right = false;
     public $display_footer = false;
+    public $content_only = true;
 
     private $prev = 0;
 
@@ -57,11 +58,20 @@ class Rees46CronModuleFrontController extends ModuleFrontController
 
             $this->recorder($xml, 'a');
 
-            header('Content-Type: application/xml; charset=utf-8');
-            echo Tools::file_get_contents(_PS_DOWNLOAD_DIR_ . 'rees46_cron.xml');
+            $this->display();
         } else {
             Tools::redirect('index.php?controller=404');
         }
+    }
+
+    public function display()
+    {
+        if (ob_get_length()) {
+            ob_clean();
+        }
+
+        header('Content-Type: application/xml; charset=utf-8');
+        echo Tools::file_get_contents(_PS_DOWNLOAD_DIR_ . 'rees46_cron.xml');
     }
 
     protected function generateShop()

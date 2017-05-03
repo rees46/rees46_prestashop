@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    p0v1n0m <ay@rees46.com>
+ *  @author    p0v1n0m <support@rees46.com>
  *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
@@ -86,7 +86,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.3.3';
+        $this->version = '3.4.0';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;

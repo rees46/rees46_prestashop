@@ -31,8 +31,10 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
     public $display_column_left = false;
     public $display_column_right = false;
     public $display_footer = false;
+    public $content_only = true;
 
     private $limit = 500;
+    private $file = '';
 
     public function initContent()
     {
@@ -69,13 +71,13 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
 
                     $this->recorder($xml, 'a');
 
-                    header('Content-Type: application/xml; charset=utf-8');
-                    echo Tools::file_get_contents(_PS_DOWNLOAD_DIR_ . 'rees46.xml');
+                    $this->file = 'rees46.xml';
+                    $this->display();
                 }
             } else {
                 if (is_file(_PS_DOWNLOAD_DIR_ . 'rees46_cron.xml')) {
-                    header('Content-Type: application/xml; charset=utf-8');
-                    echo Tools::file_get_contents(_PS_DOWNLOAD_DIR_ . 'rees46_cron.xml');
+                    $this->file = 'rees46_cron.xml';
+                    $this->display();
                 } else {
                     $this->recorder('', 'w+');
 
@@ -87,6 +89,16 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
         } else {
             Tools::redirect('index.php?controller=404');
         }
+    }
+
+    public function display()
+    {
+        if (ob_get_length()) {
+            ob_clean();
+        }
+
+        header('Content-Type: application/xml; charset=utf-8');
+        echo Tools::file_get_contents(_PS_DOWNLOAD_DIR_ . $this->file);
     }
 
     protected function generateShop()
