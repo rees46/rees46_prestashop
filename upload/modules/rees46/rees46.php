@@ -86,7 +86,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.4.0';
+        $this->version = '3.4.1';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -661,9 +661,11 @@ class Rees46 extends Module
                     );
                 }
 
-                uasort($modules, function ($a, $b) {
+                function sortModules($a, $b) {
                     return ($a['position'] - $b['position']);
-                });
+                }
+
+                uasort($modules, 'sortModules');
 
                 $this->context->smarty->assign(
                     array(

@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.4.1
+* Fixed install bug in PrestaShop 1.6.1.xx
+
 ## 3.4.0
 * Fixed bug in xml (500 error)
 * Replaced email in files
