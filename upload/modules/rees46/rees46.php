@@ -86,7 +86,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.4.1';
+        $this->version = '3.4.2';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -1726,7 +1726,7 @@ class Rees46 extends Module
                 'rees46_lang_status' => $this->l('Status'),
                 'rees46_lang_repeat' => $this->l('Repeat'),
                 'rees46_list_values' => $list_values,
-                'rees46_secure_key' => Tools::encrypt(Configuration::get('REES46_XML_CRON') . _PS_VERSION_),
+                'rees46_secure_key' => Tools::encrypt(_PS_BASE_URL_ . __PS_BASE_URI__ . _PS_VERSION_),
             )
         );
 
@@ -2023,7 +2023,7 @@ class Rees46 extends Module
             if (Configuration::get('REES46_LOG_STATUS')) {
                 if (version_compare(_PS_VERSION_, '1.6', '<')) {
                     Logger::addLog(
-                        'REES46: export xml',
+                        'REES46: export product feed',
                         3,
                         $return['info']['http_code'],
                         null,
@@ -2032,7 +2032,7 @@ class Rees46 extends Module
                     );
                 } else {
                     PrestaShopLogger::addLog(
-                        'REES46: export xml',
+                        'REES46: export product feed',
                         3,
                         $return['info']['http_code'],
                         null,

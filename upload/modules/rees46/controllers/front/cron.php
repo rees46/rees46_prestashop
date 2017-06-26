@@ -154,7 +154,17 @@ class Rees46CronModuleFrontController extends ModuleFrontController
 
             if ($product->quantity > 0) {
                 $xml .= '      <offer id="' . $product->id . '" ';
+
+                if ($product->quantity > 10) {
+                    $xml .= 'leftovers="lot">';
+                } elseif ($product->quantity > 1) {
+                    $xml .= 'leftovers="few">';
+                } else {
+                    $xml .= 'leftovers="one">';
+                }
+
                 $xml .= 'available="true">' . "\n";
+
                 $xml .= '        <url>'.$this->replacer($this->context->link->getProductLink($product->id)).'</url>' . "\n";
 
                 $price = $product->getPrice(!Tax::excludeTaxeOption());

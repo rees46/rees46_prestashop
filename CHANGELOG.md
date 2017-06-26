@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.4.2
+* Added leftovers tag to XML
+* Updated translations
+
 ## 3.4.1
 * Fixed install bug in PrestaShop 1.6.1.xx
 
