@@ -199,7 +199,12 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
                             $product->id
                         )).'</url>' . "\n";
 
-                        $price = $product->getPrice(!Tax::excludeTaxeOption());
+                        if (Configuration::get('REES46_XML_PRICE')) {
+                            $price = $product->getPrice(!Tax::excludeTaxeOption());
+                        } else {
+                            $price = $product->getPrice(Tax::excludeTaxeOption());
+                        }
+
                         $currency = new Currency((int)Configuration::get('REES46_XML_CURRENCY'));
                         $price *= $currency->conversion_rate;
 

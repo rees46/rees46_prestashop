@@ -47,6 +47,7 @@ class Rees46 extends Module
         'REES46_ORDER_COMPLETED',
         'REES46_ORDER_CANCELLED',
         'REES46_XML_CURRENCY',
+        'REES46_XML_PRICE',
         'REES46_XML_CRON',
         'REES46_LOG_STATUS',
     );
@@ -86,7 +87,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.4.2';
+        $this->version = '3.4.3';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -550,12 +551,7 @@ class Rees46 extends Module
                 foreach ($modules as $key => $module) {
                     $params = array();
 
-                    if ($module['limit'] > 0) {
-                        $params['limit'] = (int)$module['limit'];
-                    } else {
-                        $params['limit'] = 4;
-                    }
-
+                    $params['limit'] = (int)$module['limit'];
                     $params['discount'] = (int)$module['discount'];
 
                     $manufacturers = Tools::jsonDecode($module['manufacturers'], true);
@@ -1074,6 +1070,25 @@ class Rees46 extends Module
                         'id' => 'id_currency',
                         'name' => 'name',
                     ),
+                ),
+                array(
+                    'type' => version_compare(_PS_VERSION_, '1.6', '<') ? 'radio' : 'switch',
+                    'label' => $this->l('Product Tax Included'),
+                    'name' => 'REES46_XML_PRICE',
+                    'is_bool' => true,
+                    'values' => array(
+                        array(
+                            'id' => 'active_on',
+                            'value' => 1,
+                            'label' => $this->l('Enabled'),
+                        ),
+                        array(
+                            'id' => 'active_off',
+                            'value' => 0,
+                            'label' => $this->l('Disabled'),
+                        ),
+                    ),
+                    'class' => 't',
                 ),
                 array(
                     'type' => 'text',

@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.4.3
+* Added setting of product tax
+* Added possibility of a zero limit
+
 ## 3.4.2
 * Added leftovers tag to XML
 * Updated translations
