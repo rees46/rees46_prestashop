@@ -100,7 +100,7 @@ class Rees46CronModuleFrontController extends ModuleFrontController
                 $xml .= "\n" . '      <currency id="' . $currency['iso_code'] . '" rate="1"/>';
             } elseif ($currency['active'] == 1) {
                 $xml .= "\n" . '      <currency id="' . $currency['iso_code'] . '" ';
-                $xml .= 'rate="' . number_format(1 / $currencies[]['conversion_rate'], 4, '.', '') . '"/>';
+                $xml .= 'rate="' . number_format(1 / $currency['conversion_rate'], 4, '.', '') . '"/>';
             }
         }
 
