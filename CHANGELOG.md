@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.4.4
+* Fixed tracking link
+* Changed xml limit
+
 ## 3.4.3
 * Added setting of product tax
 * Added possibility of a zero limit

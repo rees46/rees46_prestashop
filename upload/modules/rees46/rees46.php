@@ -87,7 +87,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.4.3';
+        $this->version = '3.4.4';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -1808,7 +1808,7 @@ class Rees46 extends Module
     protected function rees46LeadTracking()
     {
         if (Configuration::get('REES46_ACTION_LEAD') == '') {
-            $url = 'https://rees46.com/trackcms/prestashop?';
+            $url = 'https://app.rees46.com/trackcms/prestashop?';
 
             $params = array(
                 'website' => _PS_BASE_URL_ . __PS_BASE_URI__,

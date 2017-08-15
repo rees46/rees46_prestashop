@@ -33,7 +33,7 @@ class Rees46XmlModuleFrontController extends ModuleFrontController
     public $display_footer = false;
     public $content_only = true;
 
-    private $limit = 500;
+    private $limit = 1000;
     private $file = '';
 
     public function initContent()
