@@ -55,7 +55,7 @@ $_MODULE['<{rees46}prestashop>rees46_424f5d1f19417f224b2cd9abd5e2e205'] = 'Audie
 $_MODULE['<{rees46}prestashop>rees46_0375aca64cb0a6d1393eb09a09f025e0'] = 'Abandoned cart remarketing tool';
 $_MODULE['<{rees46}prestashop>rees46_961be1dc81a2ef4e116529a1a5a928fe'] = 'REES46 dashboard';
 $_MODULE['<{rees46}prestashop>rees46_8faa7616b66ec7990abd90e6eb970b03'] = 'Documentação:';
-$_MODULE['<{rees46}prestashop>rees46_4992d553c02c6ce1790b49b33a7c5670'] = 'http://docs.rees46.com/display/en/PrestaShop+Module';
+$_MODULE['<{rees46}prestashop>rees46_4992d553c02c6ce1790b49b33a7c5670'] = 'https://docs.rees46.com/display/en/PrestaShop+Module';
 $_MODULE['<{rees46}prestashop>rees46_15503247e4b9edbe6a01e08b4850da7c'] = 'Apoio:';
 $_MODULE['<{rees46}prestashop>rees46_cf4e7bc72eb716769a6abc5513ea3297'] = 'https://addons.prestashop.com/en/contact-us?id_product=18056';
 $_MODULE['<{rees46}prestashop>rees46_f9d9c833f79d60e2efa9fba336e67fa8'] = 'Bloco de recomendações do produto';

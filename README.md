@@ -6,9 +6,9 @@
 
 ## Documentation
 
-English documentation: [http://docs.rees46.com/display/en/PrestaShop+Module](http://docs.rees46.com/display/en/PrestaShop+Module)
+English documentation: [https://docs.rees46.com/display/en/PrestaShop+Module](https://docs.rees46.com/display/en/PrestaShop+Module)
 
-Русская документация: [http://docs.rees46.com/pages/viewpage.action?pageId=7639577](http://docs.rees46.com/pages/viewpage.action?pageId=7639577)
+Русская документация: [https://docs.rees46.com/pages/viewpage.action?pageId=7639577](https://docs.rees46.com/pages/viewpage.action?pageId=7639577)
 
 ## Support
 
