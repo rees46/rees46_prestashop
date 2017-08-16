@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.4.5
+* Fixed API links
+
 ## 3.4.4
 * Fixed tracking link
 * Changed xml limit

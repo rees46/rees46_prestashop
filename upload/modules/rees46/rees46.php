@@ -87,7 +87,7 @@ class Rees46 extends Module
     {
         $this->name = 'rees46';
         $this->tab = 'front_office_features';
-        $this->version = '3.4.4';
+        $this->version = '3.4.5';
         $this->author = 'REES46';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -401,7 +401,7 @@ class Rees46 extends Module
                 $curl_data['shop_secret'] = Configuration::get('REES46_SECRET_KEY');
                 $curl_data['orders'] = $data;
 
-                $url = 'http://api.rees46.com/import/sync_orders';
+                $url = 'https://api.rees46.com/import/sync_orders';
 
                 $return = $this->curl('POST', $url, Tools::jsonEncode($curl_data));
 
@@ -1286,9 +1286,9 @@ class Rees46 extends Module
                 . '</a><br><br>'
                 . $this->l('Documentation:')
                 . ' <a href="'
-                . $this->l('http://docs.rees46.com/display/en/PrestaShop+Module')
+                . $this->l('https://docs.rees46.com/display/en/PrestaShop+Module')
                 . '" target="_blank">'
-                . $this->l('http://docs.rees46.com/display/en/PrestaShop+Module')
+                . $this->l('https://docs.rees46.com/display/en/PrestaShop+Module')
                 . ' <i class="icon-external-link"></i></a><br><br>'
                 . $this->l('Support:')
                 . ' <a href="'
@@ -1796,7 +1796,7 @@ class Rees46 extends Module
     {
         $json = array();
 
-        $return = $this->curl('GET', 'https://rees46.com/api/categories');
+        $return = $this->curl('GET', 'https://app.rees46.com/api/categories');
 
         if (isset($return['result'])) {
             $json = $return['result'];
@@ -1891,7 +1891,7 @@ class Rees46 extends Module
         $curl_data['country_code'] = Tools::getValue('country_code');
         $curl_data['currency_code'] = Tools::getValue('currency_code');
 
-        $return = $this->curl('POST', 'https://rees46.com/api/customers', Tools::jsonEncode($curl_data));
+        $return = $this->curl('POST', 'https://app.rees46.com/api/customers', Tools::jsonEncode($curl_data));
 
         $result = Tools::jsonDecode($return['result'], true);
 
@@ -1964,7 +1964,7 @@ class Rees46 extends Module
         $curl_data['yml_file_url'] = _PS_BASE_URL_.__PS_BASE_URI__ . 'index.php?fc=module&module=rees46&controller=xml';
         $curl_data['cms_id'] = 16;
 
-        $return = $this->curl('POST', 'https://rees46.com/api/shops', Tools::jsonEncode($curl_data));
+        $return = $this->curl('POST', 'https://app.rees46.com/api/shops', Tools::jsonEncode($curl_data));
 
         $result = Tools::jsonDecode($return['result'], true);
 
@@ -2030,7 +2030,7 @@ class Rees46 extends Module
 
         $curl_data['yml_file_url'] = _PS_BASE_URL_.__PS_BASE_URI__ . 'index.php?fc=module&module=rees46&controller=xml';
 
-        $return = $this->curl('PUT', 'https://rees46.com/api/shop/set_yml', Tools::jsonEncode($curl_data));
+        $return = $this->curl('PUT', 'https://app.rees46.com/api/shop/set_yml', Tools::jsonEncode($curl_data));
 
         if ($return['info']['http_code'] < 200 || $return['info']['http_code'] >= 300) {
             $json['error'] = $this->l('Could not export product feed.');
@@ -2142,7 +2142,7 @@ class Rees46 extends Module
 
             $curl_data['orders'] = $export_data;
 
-            $return = $this->curl('POST', 'http://api.rees46.com/import/orders', Tools::jsonEncode($curl_data));
+            $return = $this->curl('POST', 'https://api.rees46.com/import/orders', Tools::jsonEncode($curl_data));
  
             if ($return['info']['http_code'] < 200 || $return['info']['http_code'] >= 300) {
                 $json['error'] = $this->l('Could not export orders.');
@@ -2244,7 +2244,7 @@ class Rees46 extends Module
 
             $curl_data['audience'] = $export_data;
 
-            $return = $this->curl('POST', 'http://api.rees46.com/import/audience', Tools::jsonEncode($curl_data));
+            $return = $this->curl('POST', 'https://api.rees46.com/import/audience', Tools::jsonEncode($curl_data));
 
             if ($return['info']['http_code'] < 200 || $return['info']['http_code'] >= 300) {
                 $json['error'] = $this->l('Could not export customers.');
@@ -2366,7 +2366,7 @@ class Rees46 extends Module
 
     protected function rees46ShopFinish()
     {
-        $url = 'https://rees46.com/api/customers/login';
+        $url = 'https://app.rees46.com/api/customers/login';
         $api_key = Configuration::get('REES46_API_KEY');
         $api_secret = Configuration::get('REES46_API_SECRET');
 
@@ -2383,7 +2383,7 @@ class Rees46 extends Module
         if (Configuration::get('REES46_API_KEY') != ''
             && Configuration::get('REES46_API_SECRET') != ''
         ) {
-            $url = 'https://rees46.com/api/customers/login';
+            $url = 'https://app.rees46.com/api/customers/login';
             $api_key = Configuration::get('REES46_API_KEY');
             $api_secret = Configuration::get('REES46_API_SECRET');
 
@@ -2392,7 +2392,7 @@ class Rees46 extends Module
             $json['form'] .= '<input type="hidden" name="api_secret" value="' . $api_secret . '">';
             $json['form'] .= '</form>';
         } else {
-            $json['url'] = 'https://rees46.com/customers/sign_in';
+            $json['url'] = 'https://app.rees46.com/customers/sign_in';
         }
 
         die(Tools::jsonEncode($json));
