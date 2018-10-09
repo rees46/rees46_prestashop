@@ -274,13 +274,8 @@ class Rees46 extends Module
 
                 $js .= 'r46(\'track\', \'view\', {';
                 $js .= ' id: ' . (int)$product->id . ',';
-                $js .= ' stock: ' . (int)$stock . ',';
-                $js .= ' price: \'' . $product->getPrice(!Tax::excludeTaxeOption()) . '\',';
-                $js .= ' name: \'' . $product->name . '\',';
-                $js .= ' categories: ' . Tools::jsonEncode($product->getCategories()) . ',';
-                $js .= ' image: \'' . $image . '\',';
-                $js .= ' url: \'' . $this->context->link->getProductLink($product->id) . '\',';
-                $js .= '});' . "\n";
+                $js .= ' stock: ' . (int)$stock;
+                $js .= ' });' . "\n";
             }
 
             if (isset($this->context->cookie->rees46_cart)) {
